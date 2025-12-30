@@ -41,6 +41,7 @@ Each pattern in this repository is documented and implemented as a **self-contai
 
 **Patterns are organized so they can be ** **read, executed, and reasoned about independently** **.**
 
+```
 k9aif-patterns/
 ├── README.md
 │
@@ -56,19 +57,12 @@ k9aif-patterns/
 │   ├── src/
 │   └── tests/
 │
-├── singleton-factory-variant/
-│   ├── README.md
-│   ├── diagram.png
-│   ├── src/
-│   └── tests/
-│
 └── shared/
     ├── common_interfaces/
     └── test_utils/
-
+```
 
 Each pattern folder is intentionally **standalone**. There is no shared runtime dependency across patterns beyond minimal utilities in **shared/**.
-
 
 ## **Core Patterns (Initial Set)**
 
