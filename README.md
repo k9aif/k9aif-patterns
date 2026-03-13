@@ -43,7 +43,7 @@ The full K9-AIF framework implementation — including:
 - reference Solution Building Blocks (SBBs)
 - end-to-end demonstration systems
 
-is hosted in a dedicated repository.
+is hosted in a dedicated repository "k9-aif-framework"
 
 This separation allows:
 
