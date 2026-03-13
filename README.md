@@ -78,12 +78,12 @@ k9aif-patterns/
 
 Each pattern is self-contained and includes:
 
-	-	Intent – the problem the pattern addresses
-	-	Context & Forces – architectural constraints and trade-offs
-	-	Structure – responsibilities and relationships
-	-	Architecture Diagram – visual representation of the pattern
-	-	Reference Implementation – minimal runnable code
-	-	Executable Tests / Examples – scenarios validating the pattern
+- Intent – the problem the pattern addresses
+- Context & Forces – architectural constraints and trade-off
+- Structure – responsibilities and relationships
+- Architecture Diagram – visual representation of the pattern
+- Reference Implementation – minimal runnable code
+- Executable Tests / Examples – scenarios validating the pattern
 
 Patterns are organized so they can be read, executed, and evaluated independently. 
 
@@ -95,10 +95,10 @@ The initial set of patterns focuses on runtime composition and governed extensib
 
 Encapsulates creation of runtime components such as:
 
-	-	agents
-	-	inference engines
-	-	connectors
-	-	runtime services
+- agents
+- inference engines
+- connectors
+- runtime services
 
 behind stable architectural contracts.
 
