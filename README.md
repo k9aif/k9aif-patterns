@@ -46,9 +46,10 @@ The full K9-AIF framework implementation — including:
 is hosted in a dedicated repository.
 
 This separation allows:
-	•	architectural patterns to evolve independently of framework code
-	•	patterns to be reused outside of K9-AIF without framework coupling
-	•	a clear distinction between architectural guidance and framework implementation
+
+- architectural patterns to evolve independently of framework code
+- patterns to be reused outside of K9-AIF without framework coupling
+- a clear distinction between architectural guidance and framework implementation
 
 ---
 
