@@ -4,17 +4,11 @@ This repository documents a curated set of architectural patterns for building g
 
 The patterns originate from architectural work in the K9-AIF (K9 Agentic Integration Framework) but are intentionally presented independently of any framework implementation.
 
-Rather than introducing a new framework or runtime, this repository focuses on reusable architectural patterns that address common challenges when designing enterprise-grade agentic systems.
+Rather than introducing a new framework or runtime, this repository focuses on reusable architectural patterns that address common design challenges encountered when building enterprise-grade agentic systems.
 
 Each pattern is supported by minimal runnable reference implementations and executable tests.
 
----
-
-## **Background: K9-AIF in Context**
-
-K9-AIF is a governed, modular architectural approach for building agentic systems that integrate orchestration, inference, external systems, security, and observability in a consistent manner. It applies long-standing enterprise architecture principles—such as **separation of concerns, governed extensibility, and contract-driven design**—to modern AI-enabled workflows.
-
-The patterns in this repository capture the **core architectural ideas** behind K9-AIF without coupling them to a specific codebase. They are intended to be reused independently or adapted into other architectures.
+The patterns capture core architectural ideas behind K9-AIF — including separation of concerns, governed extensibility, and contract-driven design — without coupling them to a specific codebase.
 
 ---
 
