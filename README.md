@@ -1,10 +1,12 @@
 # **K9-AIF Core Architectural Patterns**
 
-This repository documents and demonstrates a curated set of **core architectural patterns** derived from the K9-AIF (K9 Agentic Integration Framework). These patterns address recurring design challenges encountered when building **governed, extensible, agentic AI systems** in enterprise environments.
+This repository documents a curated set of architectural patterns for building governed agentic AI systems.
 
-Rather than presenting a framework or product, this repository focuses on **reusable architectural patterns**—each grounded in proven software engineering principles and validated through working implementations and executable tests.
+The patterns originate from architectural work in the K9-AIF (K9 Agentic Integration Framework) but are intentionally presented independently of any framework implementation.
 
-The patterns here are intentionally **framework-agnostic**. While reference implementations may use ecosystems such as CrewAI, LangChain, or custom runtimes, the architectural intent remains portable across agent frameworks, model providers, and deployment environments.
+Rather than introducing a new framework or runtime, this repository focuses on reusable architectural patterns that address common challenges when designing enterprise-grade agentic systems.
+
+Each pattern is supported by minimal runnable reference implementations and executable tests.
 
 ---
 
@@ -13,6 +15,29 @@ The patterns here are intentionally **framework-agnostic**. While reference impl
 K9-AIF is a governed, modular architectural approach for building agentic systems that integrate orchestration, inference, external systems, security, and observability in a consistent manner. It applies long-standing enterprise architecture principles—such as **separation of concerns, governed extensibility, and contract-driven design**—to modern AI-enabled workflows.
 
 The patterns in this repository capture the **core architectural ideas** behind K9-AIF without coupling them to a specific codebase. They are intended to be reused independently or adapted into other architectures.
+
+---
+
+## **Architectural Scope**
+
+Agentic AI systems introduce new architectural concerns that traditional software architectures do not fully address, including:
+
+	-	dynamic agent orchestration
+	-	runtime composition of components
+	-	extensibility without loss of governance
+	-	integration with external systems and models
+	-	operational observability and control
+
+The patterns documented here apply long-standing enterprise architecture principles to these challenges, including:
+
+	-	separation of concerns
+	-	contract-driven design
+	-	governed extensibility
+	-	configuration-driven runtime composition
+
+While reference implementations may use ecosystems such as CrewAI, LangChain, or custom runtimes, the patterns themselves remain framework-agnostic and portable across technology stacks.
+
+---
 
 ## Relationship to the K9-AIF Framework
 
@@ -28,18 +53,7 @@ This separation allows:
 
 ---
 
-## **What This Repository Contains**
-
-Each pattern in this repository is documented and implemented as a **self-contained unit**, including:
-
-* **Intent** – the problem the pattern addresses
-* **Context & Forces** – architectural constraints and trade-offs
-* **Structure** – responsibilities and relationships
-* **Diagram** – a rendered architecture diagram (image, not **.puml**)
-* **Reference Implementation** – minimal, runnable code
-* **Tests / Examples** – executable scenarios validating the pattern
-
-**Patterns are organized so they can be ** **read, executed, and reasoned about independently** **.**
+## Repository Structure
 
 ```
 k9aif-patterns/
@@ -62,21 +76,41 @@ k9aif-patterns/
     └── test_utils/
 ```
 
-Each pattern folder is intentionally **standalone**. There is no shared runtime dependency across patterns beyond minimal utilities in **shared/**.
+Each pattern is self-contained and includes:
 
-## **Core Patterns (Initial Set)**
+	-	Intent – the problem the pattern addresses
+	-	Context & Forces – architectural constraints and trade-offs
+	-	Structure – responsibilities and relationships
+	-	Architecture Diagram – visual representation of the pattern
+	-	Reference Implementation – minimal runnable code
+	-	Executable Tests / Examples – scenarios validating the pattern
 
-The initial set of patterns focuses on **runtime composition, extensibility, and governance**—areas that consistently challenge agentic system design.
+Patterns are organized so they can be read, executed, and evaluated independently. 
+
+## **Initial Pattern Set**
+
+The initial set of patterns focuses on runtime composition and governed extensibility, areas that frequently challenge agentic system design.
 
 ### **1. Factory Pattern (Governed Instantiation)**
 
-Encapsulates creation of runtime components (agents, connectors, inference engines) behind stable architectural contracts, enabling configuration-driven extensibility and centralized governance.
+Encapsulates creation of runtime components such as:
+
+	-	agents
+	-	inference engines
+	-	connectors
+	-	runtime services
+
+behind stable architectural contracts.
+
+This enables configuration-driven extensibility while maintaining centralized governance over component creation and lifecycle management.
+
 
 ### **2. Runtime Agent Loader Pattern**
 
-Dynamically loads and instantiates agents and crews at runtime based on configuration (**agent.yaml**, **crew.yaml**), decoupling orchestration logic from specific agent frameworks or model providers.
+Dynamically loads and instantiates agents and crews/squads at runtime based on configuration (**agent.yaml**, **crew.yaml**, **squad.yaml**), decoupling orchestration logic from specific agent frameworks or model providers.
 
-> Reference implementations demonstrate a CrewAI-based loader, while documenting how the same pattern applies to LangChain, BeeAI, or custom runtimes.
+> Reference implementations demonstrate a CrewAI-based loader, while architectural pattern applies equally to:
+> 
 
 ### **3. Singleton-Backed Factory Variant**
 
