@@ -13,6 +13,15 @@ This design reflects integration principles used in the **K9-AIF architecture**,
 
 ---
 
+## Note on MCP
+
+The Model Context Protocol (MCP) was introduced by Anthropic to standardize how AI systems access external tools and services.
+
+The pattern described here does not define the MCP protocol itself.  
+Instead, it illustrates an architectural approach for integrating MCP-based connectors within a governed agent architecture such as K9-AIF.
+
+---
+
 ## Pattern Intent
 
 Provide a **standardized connector framework** that allows agents to access external systems through governed interfaces.
