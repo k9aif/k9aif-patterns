@@ -1,0 +1,19 @@
+############################################################
+# LLM Configuration
+# Used by ConfigLoader
+############################################################
+
+ollama:
+  host: "http://localhost:11434"
+  model: "granite3-dense:2b"
+
+watsonx:
+  url: "https://us-south.ml.cloud.ibm.com"
+  api_key: ""
+  project_id: ""
+  space_id: ""
+  model_id: "ibm/granite-20b-code-instruct"
+
+openai:
+  api_key: ""
+  model: "gpt-4o-mini"
