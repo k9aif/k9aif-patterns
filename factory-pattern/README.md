@@ -1,4 +1,4 @@
-**Factory Pattern (LLM Provider Example)
+# Factory Pattern (LLM Provider Example)
 
 This pattern demonstrates the Factory Pattern applied to LLM provider selection in an agentic system.
 
@@ -11,7 +11,7 @@ The implementation follows principles used in the K9-AIF architecture, including
 
 ---
 
-**Pattern Intent
+## Pattern Intent
 
 Encapsulate object creation behind a factory so that the client code does not depend on concrete classes.
 
@@ -25,5 +25,8 @@ This allows:
 
 ---
 
-**Class Diagram
+## Class Diagram
+
+![Factory Pattern Class Diagram](factory_class_diagram.png)
+
 
