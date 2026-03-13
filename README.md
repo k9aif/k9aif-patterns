@@ -22,18 +22,18 @@ The patterns in this repository capture the **core architectural ideas** behind 
 
 Agentic AI systems introduce new architectural concerns that traditional software architectures do not fully address, including:
 
-	-	dynamic agent orchestration
-	-	runtime composition of components
-	-	extensibility without loss of governance
-	-	integration with external systems and models
-	-	operational observability and control
+- dynamic agent orchestration
+- runtime composition of components
+- extensibility without loss of governance
+- integration with external systems and models
+- operational observability and control
 
 The patterns documented here apply long-standing enterprise architecture principles to these challenges, including:
 
-	-	separation of concerns
-	-	contract-driven design
-	-	governed extensibility
-	-	configuration-driven runtime composition
+- separation of concerns
+- contract-driven design
+- governed extensibility
+- configuration-driven runtime composition
 
 While reference implementations may use ecosystems such as CrewAI, LangChain, or custom runtimes, the patterns themselves remain framework-agnostic and portable across technology stacks.
 
