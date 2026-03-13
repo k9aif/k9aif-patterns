@@ -10,6 +10,7 @@ The patterns capture core architectural ideas behind K9-AIF — including separa
 
 Where useful, patterns may include minimal reference implementations or examples, but the emphasis of this repository is architecture documentation rather than full framework code.
 
+K9-AIF Framework link:
 ➡️ https://github.com/k9aif/k9-aif-framework
 
 ---
