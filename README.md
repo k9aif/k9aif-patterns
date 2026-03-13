@@ -6,9 +6,9 @@ The patterns originate from architectural work in the K9-AIF (K9 Agentic Integra
 
 Rather than introducing a new framework or runtime, this repository focuses on reusable architectural patterns that address common design challenges encountered when building enterprise-grade agentic systems.
 
-Each pattern is supported by minimal runnable reference implementations and executable tests.
+The patterns capture core architectural ideas behind K9-AIF — including separation of concerns, governed extensibility, and contract-driven design — without coupling them to a specific runtime or framework.
 
-The patterns capture core architectural ideas behind K9-AIF — including separation of concerns, governed extensibility, and contract-driven design — without coupling them to a specific codebase.
+Where useful, patterns may include minimal reference implementations or examples, but the emphasis of this repository is architecture documentation rather than full framework code.
 
 ---
 
@@ -57,23 +57,24 @@ This separation allows:
 
 ```
 k9aif-patterns/
-├── README.md
-│
-├── factory-pattern/
-│   ├── README.md
-│   ├── diagram.png
-│   ├── src/
-│   └── tests/
-│
-├── runtime-agent-loader-pattern/
-│   ├── README.md
-│   ├── diagram.png
-│   ├── src/
-│   └── tests/
-│
-└── shared/
-    ├── common_interfaces/
-    └── test_utils/
+
+README.md
+
+factory-pattern/
+    README.md
+    diagram.png
+
+inference-pattern/
+    README.md
+    inference_layer_small.png
+
+external-connector-pattern/
+    README.md
+    governed-connector-pattern.png
+
+runtime-agent-loader-pattern/
+    README.md
+    loader.png
 ```
 
 Each pattern is self-contained and includes:
@@ -82,8 +83,6 @@ Each pattern is self-contained and includes:
 - Context & Forces – architectural constraints and trade-off
 - Structure – responsibilities and relationships
 - Architecture Diagram – visual representation of the pattern
-- Reference Implementation – minimal runnable code
-- Executable Tests / Examples – scenarios validating the pattern
 
 Patterns are organized so they can be read, executed, and evaluated independently. 
 
@@ -106,27 +105,44 @@ This enables configuration-driven extensibility while maintaining centralized go
 
 ---
 
-### **2. Runtime Agent Loader Pattern**
+### **2. Inference Layer Architecture**
 
-Dynamically loads and instantiates agents and crews/squads at runtime based on configuration files such as:
+Defines a provider-independent abstraction for AI inference.
 
-- agent.yaml
-- crew.yaml
-- squad.yaml
+This layer allows applications to interact with different model providers (for example local models, cloud models, or enterprise AI platforms) through a stable inference contract.
 
-This decouples orchestration logic from specific agent frameworks or model providers.
+Benefits include:
 
-Reference implementations demonstrate a CrewAI-based loader, while the architectural pattern applies equally to other agent orchestration environments.
-
----
-
-### **3. Singleton-Backed Factory Variant**
-
-A controlled variant of the Factory Pattern where shared runtime services (for example monitors, security contexts, and governance components) are provisioned as governed singletons while still enforcing lifecycle and policy controls through the factory interface.
+- model provider independence
+- consistent inference interfaces
+- easier integration of new LLM providers
 
 ---
 
-Additional patterns will be added incrementally as they are stabilized and validated.
+### **3. External Connector Architecture
+
+Defines a connector-based integration layer that standardizes how agents interact with external systems such as:
+
+- APIs
+- databases
+- file systems
+- messaging systems
+- queue services
+- MCP servers
+
+The architecture enforces governance controls at the integration boundary while allowing new connectors to be introduced without modifying agent logic.
+
+---
+
+### **4. Runtime Agent Loader Pattern
+
+Dynamically loads and instantiates agents, crews, and orchestration components at runtime based on configuration files such as:
+
+- agents.yaml
+- crews.yaml
+- orchestrators.yaml
+
+This decouples orchestration structure from runtime code and enables configuration-driven orchestration pipelines.
 
 ---
 
