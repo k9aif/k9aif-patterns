@@ -35,15 +35,20 @@ While reference implementations may use ecosystems such as CrewAI, LangChain, or
 
 ## Relationship to the K9-AIF Framework
 
-This repository documents architectural patterns that are **derived from and validated within the K9-AIF Framework**, but it is intentionally maintained as a **separate repository**.
+These architectural patterns are derived from and validated within the K9-AIF Framework, but they are intentionally maintained as a separate repository.
 
-The full K9-AIF framework implementation—including Architecture Building Blocks (ABBs), reference Solution Building Blocks (SBBs), and end-to-end demonstrations—is hosted in a dedicated repository. A link to the K9-AIF Framework repository will be provided once the patterns documented here are finalized and validated.
+The full K9-AIF framework implementation — including:
+
+- Architecture Building Blocks (ABBs)
+- reference Solution Building Blocks (SBBs)
+- end-to-end demonstration systems
+
+is hosted in a dedicated repository.
 
 This separation allows:
-
-- Architectural patterns to evolve independently of framework code
-- Patterns to be reused outside of K9-AIF without framework coupling
-- Clear distinction between **architectural guidance** and **framework implementation**
+	•	architectural patterns to evolve independently of framework code
+	•	patterns to be reused outside of K9-AIF without framework coupling
+	•	a clear distinction between architectural guidance and framework implementation
 
 ---
 
