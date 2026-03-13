@@ -29,4 +29,33 @@ This allows:
 
 ![Factory Pattern Class Diagram](factory_class_diagram.png)
 
+---
+
+
+## Runtime Polymorphism
+
+This implementation enables **polymorphic runtime binding**.
+
+The client interacts only with the abstract `LLMServer` interface:
+
+```python
+llm = factory.create(provider, prompt)
+response = llm.process()
+```
+
+The concrete implementation of process() is determined at runtime based on the configured provider. 
+
+``` text
+config.yaml
+provider: ollama
+```
+
+The factory returns instance of:
+
+``` text
+OllamaServer
+```
+
+---
+
 
