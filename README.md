@@ -104,17 +104,27 @@ behind stable architectural contracts.
 
 This enables configuration-driven extensibility while maintaining centralized governance over component creation and lifecycle management.
 
+---
 
 ### **2. Runtime Agent Loader Pattern**
 
-Dynamically loads and instantiates agents and crews/squads at runtime based on configuration (**agent.yaml**, **crew.yaml**, **squad.yaml**), decoupling orchestration logic from specific agent frameworks or model providers.
+Dynamically loads and instantiates agents and crews/squads at runtime based on configuration files such as:
 
-> Reference implementations demonstrate a CrewAI-based loader, while architectural pattern applies equally to:
-> 
+- agent.yaml
+- crew.yaml
+- squad.yaml
+
+This decouples orchestration logic from specific agent frameworks or model providers.
+
+Reference implementations demonstrate a CrewAI-based loader, while the architectural pattern applies equally to other agent orchestration environments.
+
+---
 
 ### **3. Singleton-Backed Factory Variant**
 
-A controlled variant of the Factory Pattern where shared runtime services (e.g., monitors, security contexts) are provisioned as governed singletons, while still enforcing lifecycle and policy controls through the factory interface.
+A controlled variant of the Factory Pattern where shared runtime services (for example monitors, security contexts, and governance components) are provisioned as governed singletons while still enforcing lifecycle and policy controls through the factory interface.
+
+---
 
 Additional patterns will be added incrementally as they are stabilized and validated.
 
@@ -138,10 +148,10 @@ This repository favors **clarity and correctness over completeness**. Patterns a
 
 This repository is intended for:
 
-* Enterprise Architects designing agentic or AI-enabled platforms
-* Senior Engineers building extensible orchestration systems
-* Platform teams establishing governance-first AI foundations
-* Architects evaluating or standardizing agent runtime patterns
+- Enterprise Architects designing agentic or AI-enabled platforms
+- Senior Engineers building extensible orchestration systems
+- Platform teams establishing governance-first AI foundations
+- Architects evaluating or standardizing agent runtime patterns
 
 ---
 
