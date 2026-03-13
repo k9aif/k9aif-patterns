@@ -1,4 +1,4 @@
-# Governed Connector Architecture
+# External Connector Architecture
 
 This document illustrates a connector-based integration architecture commonly used in enterprise AI and agentic systems.
 
