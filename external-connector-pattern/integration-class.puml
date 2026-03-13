@@ -1,0 +1,59 @@
+@startuml
+title Integration Layer Class Diagram
+
+package "Integration Layer (ABB)" {
+  abstract class BaseConnector {
+    +connect()
+    +send(request)
+    +receive()
+  }
+
+  class MCPClientConnector {
+    +connect_to_server()
+    +send_request()
+    +receive_response()
+  }
+
+  class APIConnector
+  class DBConnector
+  class FileConnector
+  class MessageConnector
+  class QueueConnector
+}
+
+package "Governance Layer" {
+  class GovernanceAgent {
+    +enforce_policy()
+    +audit()
+    +log()
+  }
+}
+
+package "External Systems (SBB)" {
+  class MCPServer {
+    +tools()
+  }
+  class ExternalAPI
+  class Database
+  class FileSystem
+  class MessageBus
+  class QueueService
+}
+
+' Relationships
+BaseConnector <|-- MCPClientConnector
+BaseConnector <|-- APIConnector
+BaseConnector <|-- DBConnector
+BaseConnector <|-- FileConnector
+BaseConnector <|-- MessageConnector
+BaseConnector <|-- QueueConnector
+
+GovernanceAgent --> BaseConnector : governs >
+
+MCPClientConnector --> MCPServer
+APIConnector --> ExternalAPI
+DBConnector --> Database
+FileConnector --> FileSystem
+MessageConnector --> MessageBus
+QueueConnector --> QueueService
+@enduml
