@@ -1,11 +1,5 @@
-####################################################
-# LLM Factory
-# Author: Ravi Natarajan
-####################################################
-
 from threading import Lock
-
-from llm_server import OllamaServer, OpenAIServer
+from llm_server import OllamaServer
 
 
 class LLMFactory:
@@ -28,18 +22,17 @@ class LLMFactory:
         if self._bootstrapped:
             return
 
-        self.register("Ollama", OllamaServer)
-        #self.register("Watsonx", WatsonxServer)
-        self.register("OpenAI", OpenAIServer)
-
+        self.register("ollama", OllamaServer)
         self._bootstrapped = True
 
     def register(self, name, cls):
-        self._registry[name] = cls
+        self._registry[name.lower()] = cls
 
     def create(self, name, prompt):
         if not self._bootstrapped:
             self.bootstrap()
+
+        name = name.lower()
 
         if name not in self._registry:
             raise ValueError(f"Unknown LLM server type: {name}")

@@ -3,6 +3,8 @@
 # Used by ConfigLoader
 ############################################################
 
+provider: ollama
+
 ollama:
   host: "http://localhost:11434"
   model: "granite3-dense:2b"
