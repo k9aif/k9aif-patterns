@@ -119,7 +119,7 @@ Benefits include:
 
 ---
 
-### **3. External Connector Architecture
+### **3. External Connector Architecture**
 
 Defines a connector-based integration layer that standardizes how agents interact with external systems such as:
 
@@ -134,7 +134,7 @@ The architecture enforces governance controls at the integration boundary while 
 
 ---
 
-### **4. Runtime Agent Loader Pattern
+### **4. Runtime Agent Loader Pattern**
 
 Dynamically loads and instantiates agents, crews, and orchestration components at runtime based on configuration files such as:
 
