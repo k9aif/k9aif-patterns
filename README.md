@@ -78,6 +78,12 @@ external-connector-pattern/
 runtime-agent-loader-pattern/
     README.md
     loader.png
+
+validation-loop-pattern/
+    README.md
+
+critic-actor-pattern/
+    README.md
 ```
 
 Each pattern is self-contained and includes:
@@ -146,6 +152,26 @@ Dynamically loads and instantiates agents, crews, and orchestration components a
 - orchestrators.yaml
 
 This decouples orchestration structure from runtime code and enables configuration-driven orchestration pipelines.
+
+---
+
+### **5. Validation Loop Pattern**
+
+Enables an agent to iteratively test a hypothesis, observe the result, and decide whether to continue — repeating until confidence is sufficient, a definitive result is reached, or the iteration cap is hit.
+
+Applicable when the agent's question is: *"Is this hypothesis true — and am I confident enough to act on it?"*
+
+Use cases include fraud signal correlation, claims evidence building, security exploit confirmation, compliance gap assessment, and document extraction confidence checks.
+
+---
+
+### **6. Critic-Actor Pattern**
+
+Enables an agent to produce a draft output, have it evaluated by a Critic, and refine it based on structured feedback — repeating until the Critic accepts the output or the round cap is hit.
+
+Also known as the Self-Correction or Refinement pattern. Applicable when the agent's question is: *"Is this output good enough — and if not, what specifically should be fixed?"*
+
+Use cases include contract drafting, schema extraction, code generation with test runners, report improvement, and RAG quality control.
 
 ---
 
