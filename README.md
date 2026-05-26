@@ -84,6 +84,10 @@ validation-loop-pattern/
 
 critic-actor-pattern/
     README.md
+
+provider-adapter-pattern/
+    README.md
+    k9-aif-inteference-llm-provider-class-diagram.png
 ```
 
 Each pattern is self-contained and includes:
@@ -162,6 +166,18 @@ Enables an agent to iteratively test a hypothesis, observe the result, and decid
 Applicable when the agent's question is: *"Is this hypothesis true — and am I confident enough to act on it?"*
 
 Use cases include fraud signal correlation, claims evidence building, security exploit confirmation, compliance gap assessment, and document extraction confidence checks.
+
+---
+
+### **7. Provider Adapter Pattern**
+
+Enables pluggable LLM provider support without coupling the factory, agents, or orchestration logic to any specific vendor.
+
+A `BaseProviderAdapter` ABB defines the construction contract. A `ProviderAdapterRegistry` maps backend names to adapter classes. `LLMFactory` resolves and delegates — it never constructs a provider directly.
+
+New providers are added by extending `BaseProviderAdapter`, implementing two methods, and calling `ProviderAdapterRegistry.register()`. No framework code changes. No agent changes. Config-driven provider selection at runtime.
+
+Applicable whenever a system must support multiple LLM backends — local models, cloud APIs, enterprise platforms — and must remain open to future providers as the AI landscape evolves.
 
 ---
 
