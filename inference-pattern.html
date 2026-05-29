@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inference Layer Pattern &#8212; K9-AIF Patterns</title>
+  <meta name="description" content="Build a provider-independent inference layer by separating ABB contracts from SBB implementations — swap Ollama, IBM Watsonx, or OpenAI via config with no code changes.">
+  <meta name="author" content="Ravi Natarajan">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{
+      --bg:#f7f4ef;--bg-card:#fff;--bg-tint:#f0ece4;
+      --border:#ddd8cf;--border-l:#e8e3da;
+      --ink:#1a1a1a;--ink-2:#3a3a3a;--ink-3:#666056;--muted:#9a9288;
+      --blue:#1C69D4;--blue-bg:rgba(28,105,212,0.06);
+      --gold:#7a5c1e;--gold-bg:rgba(122,92,30,0.07);
+      --code-fg:#1C69D4;--code-bg:rgba(28,105,212,0.06);
+    }
+    html{scroll-behavior:smooth;}
+    body{background:var(--bg);color:var(--ink-2);font-family:'Inter',Arial,system-ui,sans-serif;font-size:15px;line-height:1.75;-webkit-font-smoothing:antialiased;}
+
+    /* Side overlay */
+    .side-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:900;opacity:0;transition:opacity .3s ease;}
+    .side-overlay.active{display:block;opacity:1;}
+
+    /* Side panel */
+    .side-panel{position:fixed;top:0;left:0;width:260px;height:100vh;background:#070f18;border-right:1px solid rgba(0,230,255,0.15);z-index:1000;transform:translateX(-100%);transition:transform .3s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow-y:auto;}
+    .side-panel.open{transform:translateX(0);}
+    .side-panel-header{display:flex;align-items:center;justify-content:space-between;padding:16px 18px 14px;border-bottom:1px solid rgba(0,230,255,0.10);}
+    .side-panel-logo{color:#d4af37;font-size:15px;font-weight:700;}
+    .side-close{background:none;border:none;color:#6f8a96;font-size:18px;cursor:pointer;padding:4px 8px;}
+    .side-close:hover{color:#00E6FF;}
+    .side-nav{list-style:none;padding:8px 0 16px;flex:1;}
+    .side-back{display:block;padding:10px 18px;color:#00E6FF;font-size:13px;font-weight:600;border-bottom:1px solid rgba(0,230,255,0.08);margin-bottom:8px;}
+    .side-back:hover{background:rgba(0,230,255,0.05);}
+    .side-cat{display:block;padding:6px 18px 2px;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#4d6880;}
+    .side-link{display:block;padding:9px 18px 9px 24px;color:#8aa0ae;font-size:13px;border-left:2px solid transparent;transition:color .18s,background .18s,border-color .18s;}
+    .side-link:hover{color:#00E6FF;background:rgba(0,230,255,0.04);border-left-color:rgba(0,230,255,0.3);}
+    .side-link.active{color:#00E6FF;border-left-color:#00E6FF;}
+
+    /* Nav */
+    .site-nav{background:#0f1720;border-bottom:1px solid rgba(0,230,255,0.08);}
+    .nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 32px;flex-wrap:wrap;}
+    .nav-left{display:flex;align-items:center;gap:0;}
+    .hamburger{display:flex;flex-direction:column;gap:4px;background:none;border:1px solid rgba(0,230,255,0.18);border-radius:6px;cursor:pointer;padding:7px 9px;margin-right:16px;transition:border-color .2s,background .2s;}
+    .hamburger:hover{border-color:rgba(0,230,255,0.45);background:rgba(0,230,255,0.05);}
+    .hamburger span{display:block;width:18px;height:2px;background:#8aa0ae;border-radius:2px;}
+    .hamburger:hover span{background:#00E6FF;}
+    .nav-brand{font-size:1rem;font-weight:700;color:#e8edf0;text-decoration:none;letter-spacing:0.04em;padding:14px 0;}
+    .nav-brand span{color:#00E6FF;}
+    .nav-links{display:flex;}
+    .nav-links a{display:inline-block;padding:13px 22px;color:#6f8a96;text-decoration:none;font-size:0.88rem;border-left:1px solid rgba(0,230,255,0.08);transition:color .2s,background .2s;}
+    .nav-links a:last-child{border-right:1px solid rgba(0,230,255,0.08);}
+    .nav-links a:hover{color:#00E6FF;background:rgba(0,230,255,0.05);}
+
+    /* Page */
+    .page{max-width:1100px;margin:0 auto;padding:0 32px;}
+
+    /* Article */
+    .article-header{max-width:760px;padding:60px 0 44px;border-bottom:1px solid var(--border);margin-bottom:44px;}
+    .article-kicker{font-size:0.68rem;font-weight:600;letter-spacing:0.24em;text-transform:uppercase;color:var(--blue);margin-bottom:18px;}
+    .article-title{font-size:clamp(24px,3.5vw,38px);font-weight:800;color:var(--ink);letter-spacing:-0.4px;line-height:1.15;margin-bottom:14px;}
+    .article-intent{font-size:1rem;color:var(--ink-3);max-width:680px;line-height:1.7;}
+
+    .article-body{max-width:760px;}
+    .article-body h2{font-size:1.1rem;font-weight:700;color:var(--ink);margin:36px 0 12px;letter-spacing:-0.2px;}
+    .article-body p{color:var(--ink-3);margin-bottom:14px;line-height:1.75;}
+    .article-body ul{list-style:none;padding:0;margin:0 0 16px;}
+    .article-body ul li{padding:6px 0 6px 20px;position:relative;color:var(--ink-3);font-size:14px;border-bottom:1px solid var(--border-l);}
+    .article-body ul li::before{content:"→";position:absolute;left:0;color:var(--blue);}
+    .article-body ul li:last-child{border-bottom:none;}
+
+    /* Image */
+    .pattern-image{margin:28px 0;border:1px solid var(--border);border-radius:10px;overflow:hidden;background:var(--bg-card);}
+    .pattern-image img{width:100%;display:block;}
+    .pattern-image figcaption{padding:8px 14px;font-size:12px;color:var(--muted);border-top:1px solid var(--border-l);font-style:italic;}
+
+    /* Tags */
+    .usage-tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px;}
+    .usage-tag{font-size:0.76rem;font-weight:500;color:var(--code-fg);background:var(--code-bg);border:1px solid rgba(28,105,212,0.14);border-radius:5px;padding:3px 9px;font-family:'Courier New',monospace;}
+
+    /* GitHub link */
+    .github-link{display:inline-flex;align-items:center;gap:8px;margin-top:32px;padding:12px 20px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;color:var(--ink-2);font-size:13px;font-weight:600;transition:border-color .2s,box-shadow .2s;}
+    .github-link:hover{border-color:#c8c0b4;box-shadow:0 2px 10px rgba(0,0,0,0.06);}
+
+    /* Back link */
+    .back-link{display:inline-block;margin:0 0 32px;font-size:13px;font-weight:600;color:var(--blue);}
+    .back-link:hover{text-decoration:underline;}
+    .bottom-back{margin:48px 0 0;padding-top:32px;border-top:1px solid var(--border);}
+
+    /* Footer */
+    footer{background:#0f1720;border-top:1px solid rgba(0,230,255,0.08);padding:40px 32px;margin-top:64px;}
+    .footer-inner{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;}
+    .footer-brand{font-weight:700;color:#e8edf0;font-size:0.95rem;}
+    .footer-brand span{color:#00E6FF;}
+    .footer-links{display:flex;gap:20px;flex-wrap:wrap;}
+    .footer-links a{font-size:0.82rem;color:#6f8a96;text-decoration:none;transition:color .2s;}
+    .footer-links a:hover{color:#00E6FF;}
+    .footer-copy{max-width:1100px;margin:16px auto 0;padding-top:14px;border-top:1px solid rgba(0,230,255,0.08);font-size:0.72rem;color:#4d6270;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+
+    @media(max-width:700px){.page{padding:0 20px;}.nav-inner{padding:0 16px;}.nav-links a{padding:13px 14px;font-size:0.8rem;}footer{padding:32px 20px;}.article-header{padding:40px 0 32px;}}
+</style>
+</head>
+<body>
+
+<div class="side-overlay" id="side-overlay"></div>
+<nav class="side-panel" id="side-panel">
+<div class="side-panel-header"><span class="side-panel-logo">K9-AIF Patterns</span><button class="side-close" id="side-close">&#x2715;</button></div>
+<ul class="side-nav">
+<li><a href="index.html" class="side-back">&#x2190; All Patterns</a></li>
+<li><span class="side-cat">EXECUTION</span></li>
+<li><a href="agent-squad-pattern.html" class="side-link">Agent Squad Pattern</a></li>
+<li><a href="validation-loop-pattern.html" class="side-link">Validation Loop Pattern</a></li>
+<li><a href="critic-actor-pattern.html" class="side-link">Critic-Actor Pattern</a></li>
+<li><span class="side-cat">INFERENCE</span></li>
+<li><a href="model-router-pattern.html" class="side-link">Model Router Pattern</a></li>
+<li><a href="inference-pattern.html" class="side-link active">Inference Layer Pattern</a></li>
+<li><a href="provider-adapter-pattern.html" class="side-link">Provider Adapter Pattern</a></li>
+<li><span class="side-cat">GOVERNANCE</span></li>
+<li><a href="factory-pattern.html" class="side-link">Factory Pattern</a></li>
+<li><a href="runtime-agent-loader-pattern.html" class="side-link">Runtime Agent Loader Pattern</a></li>
+<li><span class="side-cat">INTEGRATION</span></li>
+<li><a href="external-connector-pattern.html" class="side-link">External Connector Pattern</a></li>
+</ul></nav>
+
+<nav class="site-nav">
+  <div class="nav-inner">
+    <div class="nav-left">
+      <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+      <a href="https://k9x.ai" class="nav-brand">K9X<span>.ai</span></a>
+    </div>
+    <div class="nav-links">
+      <a href="https://k9x.ai">Home</a>
+      <a href="https://pydocs.k9x.ai/starthere/">Docs</a>
+      <a href="https://blog.k9x.ai">Blog</a>
+      <a href="https://graph.k9x.ai" target="_blank" rel="noopener">Graph Explorer</a>
+      <a href="https://github.com/k9aif/k9aif-patterns" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+</nav>
+
+<div class="page">
+
+  <header class="article-header">
+    <div class="article-kicker">Inference Pattern</div>
+    <h1 class="article-title">Inference Layer Pattern</h1>
+    <p class="article-intent">Build a provider-independent inference layer by separating ABB contracts from SBB implementations — swap Ollama, IBM Watsonx, or OpenAI via config with no code changes.</p>
+  </header>
+
+  <div class="article-body">
+
+    <a href="index.html" class="back-link">&#x2190; All Patterns</a>
+
+    <figure class="pattern-image">
+      <img src="https://raw.githubusercontent.com/k9aif/k9aif-patterns/main/k9aif-patterns/inference-pattern/inference_layer_small.png" alt="Inference Layer Pattern diagram" loading="lazy">
+      <figcaption>Inference Layer Pattern — structural diagram</figcaption>
+    </figure>
+
+    <h2>Motivation</h2>
+    <p>Agents that import LLM clients directly become provider-locked. Switching from Ollama to Watsonx requires modifying every agent. The inference layer pattern ensures the framework controls which provider is used, not the agent.</p><p>ABB contracts define what the inference layer must provide. SBB implementations deliver it for each provider. The factory resolves the right implementation from config at runtime.</p>
+
+    <h2>Structure</h2>
+    <ul>
+      <li>BaseLLM ABB defines the inference contract</li>
+<li>OllamaLLM, WatsonxLLM, MockLLM are SBB implementations</li>
+<li>ProviderAdapterRegistry maps provider name to adapter class</li>
+<li>LLMFactory.bootstrap(config) initialises the correct provider</li>
+<li>LLMFactory.get(alias) returns a cached instance</li>
+<li>Agents call llm_invoke() — never touch LLMFactory directly</li>
+    </ul>
+
+    <h2>Key Concepts</h2>
+    <div class="usage-tags">
+      <span class="usage-tag">BaseLLM</span>
+<span class="usage-tag">LLMFactory</span>
+<span class="usage-tag">OllamaLLM</span>
+<span class="usage-tag">InferenceRequest</span>
+<span class="usage-tag">InferenceResponse</span>
+<span class="usage-tag">ProviderAdapterRegistry</span>
+<span class="usage-tag">MockLLM</span>
+    </div>
+
+    <h2>Used in K9-AIF</h2>
+    <div class="usage-tags">
+      <span class="usage-tag">LLMFactory</span>
+<span class="usage-tag">OllamaLLM</span>
+<span class="usage-tag">InferenceRequest</span>
+<span class="usage-tag">InferenceResponse</span>
+<span class="usage-tag">ProviderAdapterRegistry</span>
+<span class="usage-tag">MockLLM (testing)</span>
+    </div>
+
+    <div class="bottom-back">
+      <a href="https://github.com/k9aif/k9aif-patterns/tree/main/k9aif-patterns/inference-pattern" class="github-link" target="_blank" rel="noopener">
+        View implementation on GitHub &#x2197;
+      </a>
+    </div>
+
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">K9X<span>.ai</span></div>
+    <div class="footer-links">
+      <a href="https://k9x.ai">k9x.ai</a>
+      <a href="index.html">Pattern Catalog</a>
+      <a href="https://github.com/k9aif/k9-aif-framework" target="_blank" rel="noopener">Framework</a>
+      <a href="https://github.com/k9aif/k9aif-patterns" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+  <div class="footer-copy">
+    <span>&#169; 2026 K9X.ai &#183; Ravi Natarajan &#183; Apache 2.0</span>
+    <span>Architecture patterns for governed agentic AI systems.</span>
+  </div>
+</footer>
+
+<script>
+
+  var hamburger=document.getElementById('hamburger');
+  var sidePanel=document.getElementById('side-panel');
+  var sideClose=document.getElementById('side-close');
+  var overlay=document.getElementById('side-overlay');
+  function open(){sidePanel.classList.add('open');overlay.classList.add('active');document.body.style.overflow='hidden';}
+  function close(){sidePanel.classList.remove('open');overlay.classList.remove('active');document.body.style.overflow='';}
+  if(hamburger)hamburger.addEventListener('click',open);
+  if(sideClose)sideClose.addEventListener('click',close);
+  if(overlay)overlay.addEventListener('click',close);
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+  document.querySelectorAll('a[href^="#"]').forEach(function(a){a.addEventListener('click',function(e){var t=document.querySelector(this.getAttribute('href'));if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth'});close();}});});
+
+</script>
+</body>
+</html>
