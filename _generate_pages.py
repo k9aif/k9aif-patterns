@@ -27,7 +27,7 @@ PATTERN_DATA = {
     "agent-squad-pattern": {
         "title": "Agent Squad Pattern",
         "intent": "Organize multiple agents into a coordinated execution unit called a Squad, enabling structured collaboration, shared context, governance enforcement, and scalable orchestration.",
-        "image": None,
+        "image": "agent-squad-pattern/k9-aif-squads-and-agents.png",
         "motivation": """Multi-agent systems fail when agents operate in isolation without shared state or governance. As systems grow, informal coordination collapses — agents produce incompatible outputs, governance becomes inconsistent, and debugging is impossible.
 
 The Squad pattern introduces a formal coordination layer between orchestrators and individual agents. A Squad defines a sequential execution flow, maintains a shared context that grows progressively richer as each agent contributes, and enforces governance at the squad boundary.""",
@@ -82,7 +82,7 @@ The Critic-Actor Pattern separates generation from evaluation, creating a feedba
     "model-router-pattern": {
         "title": "Model Router Pattern",
         "intent": "Dynamically select the most appropriate model for a given task based on task type, complexity, cost, latency, and policy constraints — fully decoupled from agent code.",
-        "image": None,
+        "image": "model-router-pattern/k9-aif-model-router.png",
         "motivation": """Agents that hardcode model choices cannot adapt to cost constraints, latency requirements, or governance policies. As model providers and capabilities evolve, every agent would require modification.
 
 The Model Router Pattern introduces a routing layer between agents and model providers. Routing decisions are governed, scored, persisted, and auditable. Agents simply declare what they need — the router decides which model serves that need.""",

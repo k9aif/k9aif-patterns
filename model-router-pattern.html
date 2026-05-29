@@ -154,7 +154,10 @@
 
     <a href="index.html" class="back-link">&#x2190; All Patterns</a>
 
-    
+    <figure class="pattern-image">
+      <img src="model-router-pattern/k9-aif-model-router.png" alt="Model Router Pattern diagram" loading="lazy">
+      <figcaption>Model Router Pattern — structural diagram</figcaption>
+    </figure>
 
     <h2>Motivation</h2>
     <p>Agents that hardcode model choices cannot adapt to cost constraints, latency requirements, or governance policies. As model providers and capabilities evolve, every agent would require modification.</p><p>The Model Router Pattern introduces a routing layer between agents and model providers. Routing decisions are governed, scored, persisted, and auditable. Agents simply declare what they need — the router decides which model serves that need.</p>
