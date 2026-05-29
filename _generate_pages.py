@@ -101,7 +101,7 @@ The Model Router Pattern introduces a routing layer between agents and model pro
     "inference-pattern": {
         "title": "Inference Layer Pattern",
         "intent": "Build a provider-independent inference layer by separating ABB contracts from SBB implementations — swap Ollama, IBM Watsonx, or OpenAI via config with no code changes.",
-        "image": "https://raw.githubusercontent.com/k9aif/k9aif-patterns/main/k9aif-patterns/inference-pattern/inference_layer_small.png",
+        "image": "inference-pattern/inference_layer_small.png",
         "motivation": """Agents that import LLM clients directly become provider-locked. Switching from Ollama to Watsonx requires modifying every agent. The inference layer pattern ensures the framework controls which provider is used, not the agent.
 
 ABB contracts define what the inference layer must provide. SBB implementations deliver it for each provider. The factory resolves the right implementation from config at runtime.""",
@@ -120,7 +120,7 @@ ABB contracts define what the inference layer must provide. SBB implementations 
     "provider-adapter-pattern": {
         "title": "Provider Adapter Pattern",
         "intent": "Support multiple pluggable backends — LLM providers, secret managers, caches, LLM bridges — without coupling factories or agents to any specific vendor. ABB contract + SBB adapters + Factory.",
-        "image": "https://raw.githubusercontent.com/k9aif/k9aif-patterns/main/k9aif-patterns/provider-adapter-pattern/k9-aif-inteference-llm-provider-class-diagram.png",
+        "image": "provider-adapter-pattern/k9-aif-inteference-llm-provider-class-diagram.png",
         "motivation": """Enterprise systems must change providers without code changes. Secret management moves from env vars to Vault. Caching moves from in-memory to Redis. LLM providers change. None of these should require touching agent or orchestrator code.
 
 The Provider Adapter Pattern applies ABB/SBB separation to every infrastructure concern: define a stable contract, register concrete implementations, let a factory select the right one from config.""",
@@ -139,7 +139,7 @@ The Provider Adapter Pattern applies ABB/SBB separation to every infrastructure 
     "factory-pattern": {
         "title": "Factory Pattern",
         "intent": "Centralise component instantiation through static factories. Never instantiate agents, routers, orchestrators, or LLMs directly in application code.",
-        "image": "https://raw.githubusercontent.com/k9aif/k9aif-patterns/main/k9aif-patterns/factory-pattern/factory_class_diagram.png",
+        "image": "factory-pattern/factory_class_diagram.png",
         "motivation": """Direct instantiation scatters construction logic, prevents governance, and couples application code to concrete implementations. When construction requires config, caching, thread-safety, and lifecycle management, doing it inline becomes unmanageable.
 
 K9-AIF factories are static — they cannot be instantiated. They maintain a thread-safe registry and return cached instances. All major components are provisioned exclusively through factories.""",
@@ -158,7 +158,7 @@ K9-AIF factories are static — they cannot be instantiated. They maintain a thr
     "runtime-agent-loader-pattern": {
         "title": "Runtime Agent Loader Pattern",
         "intent": "Load and wire agents, squads, and orchestrators from declarative YAML configuration at runtime — change orchestration structure without changing or redeploying application code.",
-        "image": "https://raw.githubusercontent.com/k9aif/k9aif-patterns/main/k9aif-patterns/runtime-agent-loader-pattern/loader.png",
+        "image": "runtime-agent-loader-pattern/loader.png",
         "motivation": """Hardcoded orchestration logic cannot be modified without deployment. Adding an agent to a squad, changing the execution flow, or swapping an orchestrator should not require code changes.
 
 Configuration-driven loading separates what the system does from how it is assembled. The YAML is the architecture definition. The loader wires it at startup.""",
@@ -176,7 +176,7 @@ Configuration-driven loading separates what the system does from how it is assem
     "external-connector-pattern": {
         "title": "External Connector Pattern",
         "intent": "Access external systems through a standardised connector layer with governance enforced at the integration boundary — APIs, databases, MCP tool servers, messaging systems.",
-        "image": "https://raw.githubusercontent.com/k9aif/k9aif-patterns/main/k9aif-patterns/external-connector-pattern/governed-connector-pattern.png",
+        "image": "external-connector-pattern/governed-connector-pattern.png",
         "motivation": """Agents that call external systems directly bypass governance, create hidden dependencies, and cannot be tested in isolation. Every external call is a governance boundary — it must be verified, logged, and policy-checked before execution.
 
 The connector layer enforces policy at the boundary, abstracts the protocol, and makes external dependencies explicit and testable.""",
