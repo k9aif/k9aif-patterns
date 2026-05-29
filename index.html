@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>K9-AIF Architecture Patterns — Catalog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A catalog of architectural patterns for building governed, enterprise-scale agentic AI systems. Drawn from the K9-AIF framework.">
+  <meta name="author" content="Ravi Natarajan">
+  <style>
+    :root {
+      --bg: #0a0f14;
+      --surface: #0f1a24;
+      --surface-el: #152232;
+      --border: rgba(0,210,230,0.12);
+      --border-glow: rgba(0,210,230,0.25);
+      --cyan: #00D2E6;
+      --cyan-dim: #009eb0;
+      --gold: #d4af37;
+      --text: #e2e8f0;
+      --text-sec: #8faab8;
+      --text-muted: #4d6878;
+      --nav-h: 52px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+    a { color: inherit; text-decoration: none; }
+
+    /* Nav */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(10,15,20,0.95); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      height: var(--nav-h);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 32px;
+    }
+    .nav-brand { font-size: 15px; font-weight: 700; color: var(--gold); letter-spacing: 0.5px; }
+    .nav-links { display: flex; gap: 4px; }
+    .nav-link { padding: 6px 14px; color: var(--text-sec); font-size: 13px; border-radius: 6px; transition: color 0.2s, background 0.2s; }
+    .nav-link:hover { color: var(--text); background: rgba(255,255,255,0.05); }
+    .nav-link--cta { color: var(--cyan); border: 1px solid rgba(0,210,230,0.30); }
+    .nav-link--cta:hover { background: rgba(0,210,230,0.08); border-color: var(--cyan); }
+
+    /* Hero */
+    .hero {
+      padding: 72px 32px 56px;
+      text-align: center;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(0,210,230,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,210,230,0.025) 1px, transparent 1px);
+      background-size: 44px 44px;
+      pointer-events: none;
+    }
+    .hero-label { font-size: 11px; font-weight: 700; letter-spacing: 2.5px; color: var(--cyan); text-transform: uppercase; margin-bottom: 16px; }
+    .hero h1 { font-size: clamp(26px, 4vw, 40px); font-weight: 800; color: #fff; letter-spacing: -0.5px; margin-bottom: 16px; line-height: 1.15; }
+    .hero p { font-size: 16px; color: var(--text-sec); max-width: 600px; margin: 0 auto 28px; }
+    .hero-meta { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
+    .meta-pill { font-size: 12px; font-weight: 600; color: var(--text-muted); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 4px 14px; }
+
+    /* Filter bar */
+    .filter-bar { padding: 24px 32px 0; display: flex; gap: 8px; flex-wrap: wrap; max-width: 1100px; margin: 0 auto; }
+    .filter-btn {
+      font-size: 12px; font-weight: 600; padding: 6px 14px;
+      border: 1px solid var(--border); border-radius: 20px;
+      color: var(--text-muted); background: none; cursor: pointer;
+      transition: all 0.18s;
+    }
+    .filter-btn:hover, .filter-btn.active { color: var(--cyan); border-color: rgba(0,210,230,0.40); background: rgba(0,210,230,0.06); }
+
+    /* Catalog grid */
+    .catalog { max-width: 1100px; margin: 0 auto; padding: 32px 32px 64px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+
+    /* Pattern card */
+    .pattern-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 14px; padding: 24px 22px 20px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .pattern-card:hover { border-color: var(--border-glow); box-shadow: 0 4px 24px rgba(0,210,230,0.07); }
+
+    .card-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+    .card-icon { font-size: 22px; flex-shrink: 0; }
+    .card-category { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); }
+
+    .card-name { font-size: 16px; font-weight: 700; color: #fff; line-height: 1.3; }
+    .card-intent { font-size: 13px; color: var(--text-sec); line-height: 1.55; }
+
+    /* Where used */
+    .card-usage { border-top: 1px solid var(--border); padding-top: 12px; margin-top: 4px; }
+    .usage-label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
+    .usage-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .usage-tag {
+      font-size: 11px; font-weight: 500; color: var(--cyan-dim);
+      background: rgba(0,210,230,0.07); border: 1px solid rgba(0,210,230,0.15);
+      border-radius: 6px; padding: 3px 9px;
+    }
+    .usage-tag--infra { color: var(--gold); background: rgba(212,175,55,0.06); border-color: rgba(212,175,55,0.18); }
+
+    /* Card footer */
+    .card-footer { margin-top: auto; }
+    .card-link {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 12px; font-weight: 600; color: var(--cyan-dim);
+      transition: color 0.18s;
+    }
+    .card-link:hover { color: var(--cyan); }
+
+    /* Footer */
+    footer { border-top: 1px solid var(--border); padding: 28px 32px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+    footer span { font-size: 13px; color: var(--text-muted); }
+    .footer-links { display: flex; gap: 20px; }
+    .footer-links a { font-size: 13px; color: var(--text-muted); transition: color 0.2s; }
+    .footer-links a:hover { color: var(--cyan); }
+
+    /* Responsive */
+    @media (max-width: 900px) { .catalog { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 600px) { .catalog { grid-template-columns: 1fr; padding: 20px; } nav { padding: 0 16px; } .hero { padding: 48px 20px 40px; } }
+  </style>
+</head>
+<body>
+
+<nav>
+  <span class="nav-brand">K9-AIF Patterns</span>
+  <div class="nav-links">
+    <a href="https://k9x.ai" class="nav-link">k9x.ai</a>
+    <a href="https://pydocs.k9x.ai" class="nav-link">Docs</a>
+    <a href="https://blog.k9x.ai" class="nav-link">Blog</a>
+    <a href="https://github.com/k9aif/k9aif-patterns" class="nav-link nav-link--cta" target="_blank" rel="noopener">GitHub →</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-label">Architecture Patterns</div>
+  <h1>K9-AIF Pattern Catalog</h1>
+  <p>Reusable architectural patterns for building governed, enterprise-scale agentic AI systems. Framework-agnostic. Production-tested.</p>
+  <div class="hero-meta">
+    <span class="meta-pill">9 Patterns</span>
+    <span class="meta-pill">Apache 2.0</span>
+    <span class="meta-pill">GoF · POSA · TOGAF lineage</span>
+  </div>
+</section>
+
+<div class="filter-bar">
+  <button class="filter-btn active" data-filter="all">All</button>
+  <button class="filter-btn" data-filter="execution">Execution</button>
+  <button class="filter-btn" data-filter="inference">Inference</button>
+  <button class="filter-btn" data-filter="integration">Integration</button>
+  <button class="filter-btn" data-filter="governance">Governance</button>
+</div>
+
+<div class="catalog">
+
+  <!-- Agent Squad Pattern -->
+  <div class="pattern-card" data-cat="execution">
+    <div class="card-header">
+      <div class="card-icon">⬢</div>
+      <span class="card-category">Execution</span>
+    </div>
+    <div class="card-name">Agent Squad Pattern</div>
+    <div class="card-intent">Organize multiple agents into a coordinated execution unit with shared context, sequential flow, and governance enforcement.</div>
+    <div class="card-usage">
+      <div class="usage-label">Used in</div>
+      <div class="usage-tags">
+        <span class="usage-tag">BaseSquad</span>
+        <span class="usage-tag">SquadLoader</span>
+        <span class="usage-tag">EOC — all 6 domain squads</span>
+        <span class="usage-tag">DoW — 6 DoDAF stages</span>
+      </div>
+    </div>
+    <div class="card-footer">
+      <a href="https://github.com/k9aif/k9aif-patterns/tree/main/k9aif-patterns/agent-squad-pattern" class="card-link" target="_blank" rel="noopener">View pattern →</a>
+    </div>
+  </div>
+
+  <!-- Validation Loop Pattern -->
+  <div class="pattern-card" data-cat="execution">
+    <div class="card-header">
+      <div class="card-icon">⟳</div>
+      <span class="card-category">Execution</span>
+    </div>
+    <div class="card-name">Validation Loop Pattern</div>
+    <div class="card-intent">Enable iterative hypothesis testing — an agent validates, observes, and retries until confidence is sufficient or iteration cap is reached.</div>
+    <div class="card-usage">
+      <div class="usage-label">Used in</div>
+      <div class="usage-tags">
+        <span class="usage-tag">BaseValidationLoopAgent</span>
+        <span class="usage-tag">K9ValidationLoopAgent</span>
+        <span class="usage-tag">FraudDetectionAgent</span>
+        <span class="usage-tag">DocumentExtractorAgent</span>
+      </div>
+    </div>
+    <div class="card-footer">
+      <a href="https://github.com/k9aif/k9aif-patterns/tree/main/k9aif-patterns/validation-loop-pattern" class="card-link" target="_blank" rel="noopener">View pattern →</a>
+    </div>
+  </div>
+
+  <!-- Critic-Actor Pattern -->
+  <div class="pattern-card" data-cat="execution">
+    <div class="card-header">
+      <div class="card-icon">◈</div>
+      <span class="card-category">Execution</span>
+    </div>
+    <div class="card-name">Critic-Actor Pattern</div>
+    <div class="card-intent">An Actor produces a draft output; a Critic evaluates it; the Actor refines — repeating until the output meets a quality bar or escalation triggers.</div>
+    <div class="card-usage">
+      <div class="usage-label">Used in</div>
+      <div class="usage-tags">
+        <span class="usage-tag">BaseCriticActorAgent</span>
+        <span class="usage-tag">K9CriticActorAgent</span>
+        <span class="usage-tag">Contract drafting agents</span>
+        <span class="usage-tag">Report writing agents</span>
+      </div>
+    </div>
+    <div class="card-footer">
+      <a href="https://github.com/k9aif/k9aif-patterns/tree/main/k9aif-patterns/critic-actor-pattern" class="card-link" target="_blank" rel="noopener">View pattern →</a>
+    </div>
+  </div>
+
+  <!-- Model Router Pattern -->
+  <div class="pattern-card" data-cat="inference">
+    <div class="card-header">
+      <div class="card-icon">⬡</div>
+      <span class="card-category">Inference</span>
+    </div>
+    <div class="card-name">Model Router Pattern</div>
+    <div class="card-intent">Dynamically select the most appropriate model based on task type, cost, latency, sensitivity, and policy — decoupled from agent code.</div>
+    <div class="card-usage">
+      <div class="usage-label">Used in</div>
+      <div class="usage-tags">
+        <span class="usage-tag">BaseModelRouter</span>
+        <span class="usage-tag">K9ModelRouter</span>
+        <span class="usage-tag">ModelRouterFactory</span>
+        <span class="usage-tag">llm_invoke()</span>
+        <span class="usage-tag">EOC routing decisions</span>
+      </div>
+    </div>
+    <div class="card-footer">
+      <a href="https://github.com/k9aif/k9aif-patterns/tree/main/k9aif-patterns/model-router-pattern" class="card-link" target="_blank" rel="noopener">View pattern →</a>
+    </div>
+  </div>
+
+  <!-- Inference Layer Pattern -->
+  <div class="pattern-card" data-cat="inference">
+    <div class="card-header">
+      <div class="card-icon">◎</div>
+      <span class="card-category">Inference</span>
+    </div>
+    <div class="card-name">Inference Layer Pattern</div>
+    <div class="card-intent">Build a provider-independent inference layer separating ABB contracts from SBB implementations — swap Ollama, Watsonx, or OpenAI via config.</div>
+    <div class="card-usage">
+      <div class="usage-label">Used in</div>
+      <div class="usage-tags">
+        <span class="usage-tag">LLMFactory</span>
+        <span class="usage-tag">OllamaLLM</span>
+        <span class="usage-tag">InferenceRequest</span>
+        <span class="usage-tag">ProviderAdapterRegistry</span>
+      </div>
+    </div>
+    <div class="card-footer">
+      <a href="https://github.com/k9aif/k9aif-patterns/tree/main/k9aif-patterns/inference-pattern" class="card-link" target="_blank" rel="noopener">View pattern →</a>
+    </div>
+  </div>
+
+  <!-- Provider Adapter Pattern -->
+  <div class="pattern-card" data-cat="inference">
+    <div class="card-header">
+      <div class="card-icon">⬤</div>
+      <span class="card-category">Inference · Integration</span>
+    </div>
+    <div class="card-name">Provider Adapter Pattern</div>
+    <div class="card-intent">Support multiple pluggable backends — LLM providers, secret managers, caches — without coupling factories or agents to any specific vendor.</div>
+    <div class="card-usage">
+      <div class="usage-label">Used in</div>
+      <div class="usage-tags">
+        <span class="usage-tag">SecretManagerFactory</span>
+        <span class="usage-tag">CacheFactory</span>
+        <span class="usage-tag">K9XLiteLLMBridgeAdapter</span>
+        <span class="usage-tag infra">EnvSecretAdapter</span>
+        <span class="usage-tag infra">RedisAdapter</span>
+      </div>
+    </div>
+    <div class="card-footer">
+      <a href="https://github.com/k9aif/k9aif-patterns/tree/main/k9aif-patterns/provider-adapter-pattern" class="card-link" target="_blank" rel="noopener">View pattern →</a>
+    </div>
+  </div>
+
+  <!-- Factory Pattern -->
+  <div class="pattern-card" data-cat="governance">
+    <div class="card-header">
+      <div class="card-icon">⬛</div>
+      <span class="card-category">Governance · Execution</span>
+    </div>
+    <div class="card-name">Factory Pattern</div>
+    <div class="card-intent">Centralise component instantiation — agents, routers, orchestrators, LLMs — through static factories. Never instantiate directly in application code.</div>
+    <div class="card-usage">
+      <div class="usage-label">Used in</div>
+      <div class="usage-tags">
+        <span class="usage-tag">AgentRegistry</span>
+        <span class="usage-tag">OrchestratorRegistry</span>
+        <span class="usage-tag">RouterFactory</span>
+        <span class="usage-tag">LLMFactory</span>
+        <span class="usage-tag">ModelRouterFactory</span>
+      </div>
+    </div>
+    <div class="card-footer">
+      <a href="https://github.com/k9aif/k9aif-patterns/tree/main/k9aif-patterns/factory-pattern" class="card-link" target="_blank" rel="noopener">View pattern →</a>
+    </div>
+  </div>
+
+  <!-- Runtime Agent Loader Pattern -->
+  <div class="pattern-card" data-cat="governance">
+    <div class="card-header">
+      <div class="card-icon">∞</div>
+      <span class="card-category">Governance · Execution</span>
+    </div>
+    <div class="card-name">Runtime Agent Loader Pattern</div>
+    <div class="card-intent">Load and wire agents, squads, and orchestrators from declarative YAML configuration at runtime — change orchestration without changing code.</div>
+    <div class="card-usage">
+      <div class="usage-label">Used in</div>
+      <div class="usage-tags">
+        <span class="usage-tag">SquadLoader</span>
+        <span class="usage-tag">AgentLoader</span>
+        <span class="usage-tag">_load_squad()</span>
+        <span class="usage-tag">k9_generator.sh</span>
+        <span class="usage-tag">DoW crew loaders</span>
+      </div>
+    </div>
+    <div class="card-footer">
+      <a href="https://github.com/k9aif/k9aif-patterns/tree/main/k9aif-patterns/runtime-agent-loader-pattern" class="card-link" target="_blank" rel="noopener">View pattern →</a>
+    </div>
+  </div>
+
+  <!-- External Connector Pattern -->
+  <div class="pattern-card" data-cat="integration">
+    <div class="card-header">
+      <div class="card-icon">⬢</div>
+      <span class="card-category">Integration</span>
+    </div>
+    <div class="card-name">External Connector Pattern</div>
+    <div class="card-intent">Access external systems through a standardised connector layer with governance enforced at the integration boundary — APIs, databases, MCP servers.</div>
+    <div class="card-usage">
+      <div class="usage-label">Used in</div>
+      <div class="usage-tags">
+        <span class="usage-tag">MCPHttpConnector</span>
+        <span class="usage-tag">MCPStdioConnector</span>
+        <span class="usage-tag">BaseMCPAgent</span>
+        <span class="usage-tag">DocumentExtractorAgent</span>
+        <span class="usage-tag">Docling OCR integration</span>
+      </div>
+    </div>
+    <div class="card-footer">
+      <a href="https://github.com/k9aif/k9aif-patterns/tree/main/k9aif-patterns/external-connector-pattern" class="card-link" target="_blank" rel="noopener">View pattern →</a>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <span>© 2026 K9X.ai · Ravi Natarajan · Apache 2.0</span>
+  <div class="footer-links">
+    <a href="https://k9x.ai">k9x.ai</a>
+    <a href="https://github.com/k9aif/k9-aif-framework" target="_blank" rel="noopener">Framework</a>
+    <a href="https://github.com/k9aif/k9aif-patterns" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://pydocs.k9x.ai" target="_blank" rel="noopener">Docs</a>
+  </div>
+</footer>
+
+<script>
+  document.querySelectorAll('.filter-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
+      this.classList.add('active');
+      var filter = this.getAttribute('data-filter');
+      document.querySelectorAll('.pattern-card').forEach(function(card) {
+        card.style.display = (filter === 'all' || card.getAttribute('data-cat').includes(filter)) ? '' : 'none';
+      });
+    });
+  });
+</script>
+
+</body>
+</html>
