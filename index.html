@@ -2,186 +2,213 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>K9-AIF Architecture Patterns — Catalog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>K9-AIF Architecture Patterns &#8212; Catalog</title>
   <meta name="description" content="A catalog of architectural patterns for building governed, enterprise-scale agentic AI systems. Drawn from the K9-AIF framework.">
   <meta name="author" content="Ravi Natarajan">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --bg:#f7f4ef; --bg-card:#ffffff; --bg-tint:#f0ece4;
-      --border:#ddd8cf; --border-l:#e8e3da;
-      --ink:#1a1a1a; --ink-2:#3a3a3a; --ink-3:#666056; --muted:#9a9288;
-      --blue:#1C69D4; --blue-bg:rgba(28,105,212,0.06);
-      --gold:#7a5c1e; --gold-bg:rgba(122,92,30,0.07);
-    }
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{
+      --bg:#f7f4ef;--bg-card:#ffffff;--bg-tint:#f0ece4;
+      --border:#ddd8cf;--border-l:#e8e3da;
+      --ink:#1a1a1a;--ink-2:#3a3a3a;--ink-3:#666056;--muted:#9a9288;
+      --blue:#1C69D4;--blue-bg:rgba(28,105,212,0.06);
+      --gold:#7a5c1e;--gold-bg:rgba(122,92,30,0.07);
+      --code-fg:#1C69D4;--code-bg:rgba(28,105,212,0.06);
+    }
     html{scroll-behavior:smooth;}
-    body{font-family:'Inter',Arial,system-ui,sans-serif;background:var(--bg);color:var(--ink-2);line-height:1.6;}
-    a{color:inherit;text-decoration:none;}
+    body{background:var(--bg);color:var(--ink-2);font-family:'Inter',Arial,system-ui,sans-serif;font-weight:400;font-size:15px;line-height:1.75;-webkit-font-smoothing:antialiased;}
 
-    nav{background:#0f1720;border-bottom:1px solid rgba(0,230,255,0.08);height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;position:sticky;top:0;z-index:100;}
-    .nav-brand{font-size:15px;font-weight:700;color:#d4af37;letter-spacing:0.4px;}
-    .nav-links{display:flex;gap:2px;}
-    .nav-link{padding:6px 14px;color:#6f8a96;font-size:13px;border-radius:6px;transition:color .2s,background .2s;}
-    .nav-link:hover{color:#00E6FF;background:rgba(0,230,255,0.05);}
-    .nav-link--cta{color:#00E6FF;border:1px solid rgba(0,230,255,0.28);border-radius:7px;}
-    .nav-link--cta:hover{background:rgba(0,230,255,0.07);}
+    /* Nav — exact boxer style */
+    .site-nav{background:#0f1720;border-bottom:1px solid rgba(0,230,255,0.08);}
+    .nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 32px;flex-wrap:wrap;}
+    .nav-brand{font-size:1rem;font-weight:700;color:#e8edf0;text-decoration:none;letter-spacing:0.04em;padding:14px 0;}
+    .nav-brand span{color:#00E6FF;}
+    .nav-links{display:flex;}
+    .nav-links a{display:inline-block;padding:13px 22px;color:#6f8a96;text-decoration:none;font-size:0.88rem;border-left:1px solid rgba(0,230,255,0.08);transition:color .2s,background .2s;}
+    .nav-links a:last-child{border-right:1px solid rgba(0,230,255,0.08);}
+    .nav-links a:hover{color:#00E6FF;background:rgba(0,230,255,0.05);}
 
-    .hero{background:#0f1720;border-bottom:3px solid var(--blue);padding:56px 32px 48px;text-align:center;}
-    .hero-label{font-size:11px;font-weight:700;letter-spacing:2.5px;color:#00E6FF;text-transform:uppercase;margin-bottom:14px;}
-    .hero h1{font-size:clamp(24px,3.5vw,36px);font-weight:800;color:#fff;letter-spacing:-0.4px;margin-bottom:14px;}
-    .hero p{font-size:15px;color:#94a3b8;max-width:580px;margin:0 auto 24px;line-height:1.65;}
-    .hero-meta{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;}
-    .meta-pill{font-size:12px;font-weight:600;color:#546880;border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:4px 14px;}
+    /* Page wrapper */
+    .page{max-width:1100px;margin:0 auto;padding:0 32px;}
 
-    .filter-bar{max-width:1060px;margin:0 auto;padding:28px 32px 0;display:flex;gap:8px;flex-wrap:wrap;}
-    .filter-btn{font-size:12px;font-weight:600;padding:5px 16px;border:1px solid var(--border);border-radius:20px;color:var(--muted);background:none;cursor:pointer;transition:all .18s;font-family:inherit;}
+    /* Article header */
+    .article-header{max-width:760px;padding:64px 0 48px;border-bottom:1px solid var(--border);margin-bottom:40px;}
+    .article-kicker{font-size:0.68rem;font-weight:600;letter-spacing:0.24em;text-transform:uppercase;color:var(--blue);margin-bottom:20px;}
+    .article-title{font-size:clamp(26px,4vw,40px);font-weight:800;color:var(--ink);letter-spacing:-0.5px;line-height:1.15;margin-bottom:16px;}
+    .article-desc{font-size:1rem;color:var(--ink-3);max-width:580px;line-height:1.7;margin-bottom:20px;}
+    .article-meta{display:flex;gap:12px;flex-wrap:wrap;}
+    .meta-tag{font-size:0.72rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);background:var(--bg-tint);border:1px solid var(--border);border-radius:4px;padding:3px 10px;}
+
+    /* Filter bar */
+    .filter-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px;}
+    .filter-btn{font-size:0.75rem;font-weight:600;padding:5px 16px;border:1px solid var(--border);border-radius:20px;color:var(--muted);background:none;cursor:pointer;transition:all .18s;font-family:'Inter',sans-serif;}
     .filter-btn:hover,.filter-btn.active{color:var(--blue);border-color:rgba(28,105,212,0.35);background:var(--blue-bg);}
 
-    .catalog{max-width:1060px;margin:0 auto;padding:24px 32px 64px;display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+    /* Catalog grid */
+    .catalog{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;padding-bottom:64px;}
 
-    .pattern-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:22px 20px 18px;display:flex;flex-direction:column;gap:10px;transition:border-color .2s,box-shadow .2s;}
-    .pattern-card:hover{border-color:#c8c0b4;box-shadow:0 3px 16px rgba(0,0,0,0.07);}
+    /* Pattern card */
+    .pattern-card{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:22px 20px 18px;display:flex;flex-direction:column;gap:10px;transition:border-color .2s,box-shadow .2s;}
+    .pattern-card:hover{border-color:#c8c0b4;box-shadow:0 2px 14px rgba(0,0,0,0.06);}
     .card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;}
-    .card-icon{font-size:20px;color:var(--ink-3);flex-shrink:0;}
-    .card-category{font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);text-align:right;}
-    .card-name{font-size:15px;font-weight:700;color:var(--ink);line-height:1.3;}
-    .card-intent{font-size:13px;color:var(--ink-3);line-height:1.55;}
-
+    .card-icon{font-size:18px;color:var(--ink-3);flex-shrink:0;}
+    .card-category{font-size:0.62rem;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);text-align:right;line-height:1.3;}
+    .card-name{font-size:0.95rem;font-weight:700;color:var(--ink);line-height:1.3;}
+    .card-intent{font-size:0.82rem;color:var(--ink-3);line-height:1.55;}
     .card-usage{border-top:1px solid var(--border-l);padding-top:10px;margin-top:4px;}
-    .usage-label{font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);margin-bottom:7px;}
+    .usage-label{font-size:0.6rem;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
     .usage-tags{display:flex;flex-wrap:wrap;gap:5px;}
-    .usage-tag{font-size:11px;font-weight:500;color:var(--blue);background:var(--blue-bg);border:1px solid rgba(28,105,212,0.15);border-radius:5px;padding:2px 8px;font-family:'Courier New',monospace;}
-    .usage-tag--infra{color:var(--gold);background:var(--gold-bg);border-color:rgba(122,92,30,0.15);}
-
+    .usage-tag{font-size:0.72rem;font-weight:500;color:var(--code-fg);background:var(--code-bg);border:1px solid rgba(28,105,212,0.12);border-radius:4px;padding:2px 7px;font-family:'Courier New',monospace;}
+    .usage-tag--gold{color:var(--gold);background:var(--gold-bg);border-color:rgba(122,92,30,0.15);}
     .card-footer{margin-top:auto;}
-    .card-link{font-size:12px;font-weight:600;color:var(--blue);}
+    .card-link{font-size:0.78rem;font-weight:600;color:var(--blue);}
     .card-link:hover{text-decoration:underline;}
 
-    footer{background:#0f1720;border-top:1px solid rgba(0,230,255,0.08);padding:24px 32px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
-    footer span{font-size:13px;color:#546880;}
-    .footer-links{display:flex;gap:20px;}
-    .footer-links a{font-size:13px;color:#546880;transition:color .2s;}
+    /* Footer — exact boxer style */
+    footer{background:#0f1720;border-top:1px solid rgba(0,230,255,0.08);padding:40px 32px;}
+    .footer-inner{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;}
+    .footer-brand{font-weight:700;color:#e8edf0;font-size:0.95rem;}
+    .footer-brand span{color:#00E6FF;}
+    .footer-links{display:flex;gap:20px;flex-wrap:wrap;}
+    .footer-links a{font-size:0.82rem;color:#6f8a96;text-decoration:none;transition:color .2s;}
     .footer-links a:hover{color:#00E6FF;}
+    .footer-copy{max-width:1100px;margin:20px auto 0;padding-top:16px;border-top:1px solid rgba(0,230,255,0.08);font-size:0.72rem;color:#4d6270;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
 
     @media(max-width:900px){.catalog{grid-template-columns:repeat(2,1fr);}}
-    @media(max-width:580px){.catalog{grid-template-columns:1fr;padding:16px;}nav{padding:0 16px;}.hero{padding:40px 20px 36px;}.filter-bar{padding:20px 16px 0;}}
+    @media(max-width:580px){.catalog{grid-template-columns:1fr;}.page{padding:0 20px;}footer{padding:32px 20px;}.nav-inner{padding:0 20px;}}
   </style>
 </head>
 <body>
 
-<nav>
-  <span class="nav-brand">K9-AIF · Patterns</span>
-  <div class="nav-links">
-    <a href="https://k9x.ai" class="nav-link">k9x.ai</a>
-    <a href="https://pydocs.k9x.ai" class="nav-link">Docs</a>
-    <a href="https://blog.k9x.ai" class="nav-link">Blog</a>
-    <a href="https://github.com/k9aif/k9aif-patterns" class="nav-link nav-link--cta" target="_blank" rel="noopener">GitHub</a>
+<nav class="site-nav">
+  <div class="nav-inner">
+    <a href="https://k9x.ai" class="nav-brand">K9X<span>.ai</span></a>
+    <div class="nav-links">
+      <a href="https://k9x.ai">Home</a>
+      <a href="https://pydocs.k9x.ai/starthere/">Docs</a>
+      <a href="https://blog.k9x.ai">Blog</a>
+      <a href="https://graph.k9x.ai" target="_blank" rel="noopener">Graph Explorer</a>
+      <a href="https://github.com/k9aif/k9aif-patterns" target="_blank" rel="noopener">GitHub</a>
+    </div>
   </div>
 </nav>
 
-<section class="hero">
-  <div class="hero-label">Architecture Patterns</div>
-  <h1>K9-AIF Pattern Catalog</h1>
-  <p>Reusable architectural patterns for building governed, enterprise-scale agentic AI systems. Framework-agnostic. Production-tested in K9-AIF.</p>
-  <div class="hero-meta">
-    <span class="meta-pill">9 Patterns</span>
-    <span class="meta-pill">Apache 2.0</span>
-    <span class="meta-pill">GoF · POSA · TOGAF lineage</span>
-  </div>
-</section>
+<div class="page">
 
-<div class="filter-bar">
-  <button class="filter-btn active" data-filter="all">All</button>
-  <button class="filter-btn" data-filter="execution">Execution</button>
-  <button class="filter-btn" data-filter="inference">Inference</button>
-  <button class="filter-btn" data-filter="integration">Integration</button>
-  <button class="filter-btn" data-filter="governance">Governance</button>
-</div>
+  <header class="article-header">
+    <div class="article-kicker">Architecture Patterns</div>
+    <h1 class="article-title">K9-AIF Pattern Catalog</h1>
+    <p class="article-desc">Reusable architectural patterns for building governed, enterprise-scale agentic AI systems. Framework-agnostic. Production-tested in K9-AIF.</p>
+    <div class="article-meta">
+      <span class="meta-tag">9 Patterns</span>
+      <span class="meta-tag">Apache 2.0</span>
+      <span class="meta-tag">GoF &middot; POSA &middot; TOGAF lineage</span>
+    </div>
+  </header>
 
-<div class="catalog">
-
-  <div class="pattern-card" data-cat="execution">
-    <div class="card-top"><div class="card-icon">&#x2B22;</div><span class="card-category">Execution</span></div>
-    <div class="card-name">Agent Squad Pattern</div>
-    <div class="card-intent">Organize multiple agents into a coordinated execution unit with shared context, sequential flow, and governance enforcement.</div>
-    <div class="card-usage"><div class="usage-label">Used in</div><div class="usage-tags"><span class="usage-tag">BaseSquad</span><span class="usage-tag">SquadLoader</span><span class="usage-tag">EOC domain squads</span><span class="usage-tag">DoW DoDAF stages</span></div></div>
-    <div class="card-footer"><a href="https://github.com/k9aif/k9aif-patterns/tree/main/k9aif-patterns/agent-squad-pattern" class="card-link" target="_blank" rel="noopener">View pattern &rarr;</a></div>
+  <div class="filter-bar">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="execution">Execution</button>
+    <button class="filter-btn" data-filter="inference">Inference</button>
+    <button class="filter-btn" data-filter="integration">Integration</button>
+    <button class="filter-btn" data-filter="governance">Governance</button>
   </div>
 
-  <div class="pattern-card" data-cat="execution">
-    <div class="card-top"><div class="card-icon">&#x27F3;</div><span class="card-category">Execution</span></div>
-    <div class="card-name">Validation Loop Pattern</div>
-    <div class="card-intent">Enable iterative hypothesis testing — validate, observe, and retry until confidence is sufficient or iteration cap is reached.</div>
-    <div class="card-usage"><div class="usage-label">Used in</div><div class="usage-tags"><span class="usage-tag">BaseValidationLoopAgent</span><span class="usage-tag">K9ValidationLoopAgent</span><span class="usage-tag">FraudDetectionAgent</span><span class="usage-tag">DocumentExtractorAgent</span></div></div>
-    <div class="card-footer"><a href="https://github.com/k9aif/k9aif-patterns/tree/main/k9aif-patterns/validation-loop-pattern" class="card-link" target="_blank" rel="noopener">View pattern &rarr;</a></div>
-  </div>
+  <div class="catalog">
 
-  <div class="pattern-card" data-cat="execution">
-    <div class="card-top"><div class="card-icon">&#x25C8;</div><span class="card-category">Execution</span></div>
-    <div class="card-name">Critic-Actor Pattern</div>
-    <div class="card-intent">An Actor produces a draft; a Critic evaluates it; the Actor refines — repeating until quality bar is met or escalation triggers.</div>
-    <div class="card-usage"><div class="usage-label">Used in</div><div class="usage-tags"><span class="usage-tag">BaseCriticActorAgent</span><span class="usage-tag">K9CriticActorAgent</span><span class="usage-tag">Contract drafting</span><span class="usage-tag">Report writing</span></div></div>
-    <div class="card-footer"><a href="https://github.com/k9aif/k9aif-patterns/tree/main/k9aif-patterns/critic-actor-pattern" class="card-link" target="_blank" rel="noopener">View pattern &rarr;</a></div>
-  </div>
+    <div class="pattern-card" data-cat="execution">
+      <div class="card-top"><div class="card-icon">&#x2B22;</div><span class="card-category">Execution</span></div>
+      <div class="card-name">Agent Squad Pattern</div>
+      <div class="card-intent">Organize multiple agents into a coordinated execution unit with shared context, sequential flow, and governance enforcement.</div>
+      <div class="card-usage"><div class="usage-label">Used in</div><div class="usage-tags"><span class="usage-tag">BaseSquad</span><span class="usage-tag">SquadLoader</span><span class="usage-tag">EOC domain squads</span><span class="usage-tag">DoW DoDAF stages</span></div></div>
+      <div class="card-footer"><a href="https://github.com/k9aif/k9aif-patterns/tree/main/k9aif-patterns/agent-squad-pattern" class="card-link" target="_blank" rel="noopener">View pattern &rarr;</a></div>
+    </div>
 
-  <div class="pattern-card" data-cat="inference">
-    <div class="card-top"><div class="card-icon">&#x2B21;</div><span class="card-category">Inference</span></div>
-    <div class="card-name">Model Router Pattern</div>
-    <div class="card-intent">Dynamically select the most appropriate model based on task type, cost, latency, and policy — fully decoupled from agent code.</div>
-    <div class="card-usage"><div class="usage-label">Used in</div><div class="usage-tags"><span class="usage-tag">BaseModelRouter</span><span class="usage-tag">K9ModelRouter</span><span class="usage-tag">ModelRouterFactory</span><span class="usage-tag">llm_invoke()</span></div></div>
-    <div class="card-footer"><a href="https://github.com/k9aif/k9aif-patterns/tree/main/k9aif-patterns/model-router-pattern" class="card-link" target="_blank" rel="noopener">View pattern &rarr;</a></div>
-  </div>
+    <div class="pattern-card" data-cat="execution">
+      <div class="card-top"><div class="card-icon">&#x27F3;</div><span class="card-category">Execution</span></div>
+      <div class="card-name">Validation Loop Pattern</div>
+      <div class="card-intent">Enable iterative hypothesis testing &mdash; validate, observe, and retry until confidence is sufficient or iteration cap is reached.</div>
+      <div class="card-usage"><div class="usage-label">Used in</div><div class="usage-tags"><span class="usage-tag">BaseValidationLoopAgent</span><span class="usage-tag">K9ValidationLoopAgent</span><span class="usage-tag">FraudDetectionAgent</span><span class="usage-tag">DocumentExtractorAgent</span></div></div>
+      <div class="card-footer"><a href="https://github.com/k9aif/k9aif-patterns/tree/main/k9aif-patterns/validation-loop-pattern" class="card-link" target="_blank" rel="noopener">View pattern &rarr;</a></div>
+    </div>
 
-  <div class="pattern-card" data-cat="inference">
-    <div class="card-top"><div class="card-icon">&#x25CE;</div><span class="card-category">Inference</span></div>
-    <div class="card-name">Inference Layer Pattern</div>
-    <div class="card-intent">Provider-independent inference layer — ABB contracts separate from SBB implementations. Swap Ollama, Watsonx, or OpenAI via config.</div>
-    <div class="card-usage"><div class="usage-label">Used in</div><div class="usage-tags"><span class="usage-tag">LLMFactory</span><span class="usage-tag">OllamaLLM</span><span class="usage-tag">InferenceRequest</span><span class="usage-tag">ProviderAdapterRegistry</span></div></div>
-    <div class="card-footer"><a href="https://github.com/k9aif/k9aif-patterns/tree/main/k9aif-patterns/inference-pattern" class="card-link" target="_blank" rel="noopener">View pattern &rarr;</a></div>
-  </div>
+    <div class="pattern-card" data-cat="execution">
+      <div class="card-top"><div class="card-icon">&#x25C8;</div><span class="card-category">Execution</span></div>
+      <div class="card-name">Critic-Actor Pattern</div>
+      <div class="card-intent">An Actor produces a draft; a Critic evaluates it; the Actor refines &mdash; repeating until quality bar is met or escalation triggers.</div>
+      <div class="card-usage"><div class="usage-label">Used in</div><div class="usage-tags"><span class="usage-tag">BaseCriticActorAgent</span><span class="usage-tag">K9CriticActorAgent</span><span class="usage-tag">Contract drafting</span><span class="usage-tag">Report writing</span></div></div>
+      <div class="card-footer"><a href="https://github.com/k9aif/k9aif-patterns/tree/main/k9aif-patterns/critic-actor-pattern" class="card-link" target="_blank" rel="noopener">View pattern &rarr;</a></div>
+    </div>
 
-  <div class="pattern-card" data-cat="inference">
-    <div class="card-top"><div class="card-icon">&#x25CF;</div><span class="card-category">Inference &middot; Integration</span></div>
-    <div class="card-name">Provider Adapter Pattern</div>
-    <div class="card-intent">Support multiple pluggable backends without coupling factories or agents to any specific vendor — LLMs, secret managers, caches.</div>
-    <div class="card-usage"><div class="usage-label">Used in</div><div class="usage-tags"><span class="usage-tag">SecretManagerFactory</span><span class="usage-tag">CacheFactory</span><span class="usage-tag">K9XLiteLLMBridgeAdapter</span><span class="usage-tag usage-tag--infra">EnvSecretAdapter</span></div></div>
-    <div class="card-footer"><a href="https://github.com/k9aif/k9aif-patterns/tree/main/k9aif-patterns/provider-adapter-pattern" class="card-link" target="_blank" rel="noopener">View pattern &rarr;</a></div>
-  </div>
+    <div class="pattern-card" data-cat="inference">
+      <div class="card-top"><div class="card-icon">&#x2B21;</div><span class="card-category">Inference</span></div>
+      <div class="card-name">Model Router Pattern</div>
+      <div class="card-intent">Dynamically select the most appropriate model based on task type, cost, latency, and policy &mdash; fully decoupled from agent code.</div>
+      <div class="card-usage"><div class="usage-label">Used in</div><div class="usage-tags"><span class="usage-tag">BaseModelRouter</span><span class="usage-tag">K9ModelRouter</span><span class="usage-tag">ModelRouterFactory</span><span class="usage-tag">llm_invoke()</span></div></div>
+      <div class="card-footer"><a href="https://github.com/k9aif/k9aif-patterns/tree/main/k9aif-patterns/model-router-pattern" class="card-link" target="_blank" rel="noopener">View pattern &rarr;</a></div>
+    </div>
 
-  <div class="pattern-card" data-cat="governance">
-    <div class="card-top"><div class="card-icon">&#x25A0;</div><span class="card-category">Governance &middot; Execution</span></div>
-    <div class="card-name">Factory Pattern</div>
-    <div class="card-intent">Centralise component instantiation through static factories. Never instantiate agents, routers, or LLMs directly in application code.</div>
-    <div class="card-usage"><div class="usage-label">Used in</div><div class="usage-tags"><span class="usage-tag">AgentRegistry</span><span class="usage-tag">RouterFactory</span><span class="usage-tag">LLMFactory</span><span class="usage-tag">ModelRouterFactory</span></div></div>
-    <div class="card-footer"><a href="https://github.com/k9aif/k9aif-patterns/tree/main/k9aif-patterns/factory-pattern" class="card-link" target="_blank" rel="noopener">View pattern &rarr;</a></div>
-  </div>
+    <div class="pattern-card" data-cat="inference">
+      <div class="card-top"><div class="card-icon">&#x25CE;</div><span class="card-category">Inference</span></div>
+      <div class="card-name">Inference Layer Pattern</div>
+      <div class="card-intent">Provider-independent inference layer &mdash; ABB contracts separate from SBB implementations. Swap Ollama, Watsonx, or OpenAI via config.</div>
+      <div class="card-usage"><div class="usage-label">Used in</div><div class="usage-tags"><span class="usage-tag">LLMFactory</span><span class="usage-tag">OllamaLLM</span><span class="usage-tag">InferenceRequest</span><span class="usage-tag">ProviderAdapterRegistry</span></div></div>
+      <div class="card-footer"><a href="https://github.com/k9aif/k9aif-patterns/tree/main/k9aif-patterns/inference-pattern" class="card-link" target="_blank" rel="noopener">View pattern &rarr;</a></div>
+    </div>
 
-  <div class="pattern-card" data-cat="governance">
-    <div class="card-top"><div class="card-icon">&#x221E;</div><span class="card-category">Governance &middot; Execution</span></div>
-    <div class="card-name">Runtime Agent Loader Pattern</div>
-    <div class="card-intent">Load and wire agents, squads, and orchestrators from declarative YAML at runtime — change orchestration without changing code.</div>
-    <div class="card-usage"><div class="usage-label">Used in</div><div class="usage-tags"><span class="usage-tag">SquadLoader</span><span class="usage-tag">AgentLoader</span><span class="usage-tag">_load_squad()</span><span class="usage-tag">k9_generator.sh</span></div></div>
-    <div class="card-footer"><a href="https://github.com/k9aif/k9aif-patterns/tree/main/k9aif-patterns/runtime-agent-loader-pattern" class="card-link" target="_blank" rel="noopener">View pattern &rarr;</a></div>
-  </div>
+    <div class="pattern-card" data-cat="inference">
+      <div class="card-top"><div class="card-icon">&#x25CF;</div><span class="card-category">Inference &middot; Integration</span></div>
+      <div class="card-name">Provider Adapter Pattern</div>
+      <div class="card-intent">Support multiple pluggable backends without coupling factories or agents to any vendor &mdash; LLMs, secret managers, caches.</div>
+      <div class="card-usage"><div class="usage-label">Used in</div><div class="usage-tags"><span class="usage-tag">SecretManagerFactory</span><span class="usage-tag">CacheFactory</span><span class="usage-tag">K9XLiteLLMBridgeAdapter</span><span class="usage-tag usage-tag--gold">EnvSecretAdapter</span></div></div>
+      <div class="card-footer"><a href="https://github.com/k9aif/k9aif-patterns/tree/main/k9aif-patterns/provider-adapter-pattern" class="card-link" target="_blank" rel="noopener">View pattern &rarr;</a></div>
+    </div>
 
-  <div class="pattern-card" data-cat="integration">
-    <div class="card-top"><div class="card-icon">&#x21CC;</div><span class="card-category">Integration</span></div>
-    <div class="card-name">External Connector Pattern</div>
-    <div class="card-intent">Access external systems through a standardised connector layer with governance enforced at the boundary — APIs, databases, MCP servers.</div>
-    <div class="card-usage"><div class="usage-label">Used in</div><div class="usage-tags"><span class="usage-tag">MCPHttpConnector</span><span class="usage-tag">MCPStdioConnector</span><span class="usage-tag">BaseMCPAgent</span><span class="usage-tag">Docling OCR</span></div></div>
-    <div class="card-footer"><a href="https://github.com/k9aif/k9aif-patterns/tree/main/k9aif-patterns/external-connector-pattern" class="card-link" target="_blank" rel="noopener">View pattern &rarr;</a></div>
-  </div>
+    <div class="pattern-card" data-cat="governance">
+      <div class="card-top"><div class="card-icon">&#x25A0;</div><span class="card-category">Governance &middot; Execution</span></div>
+      <div class="card-name">Factory Pattern</div>
+      <div class="card-intent">Centralise component instantiation through static factories. Never instantiate agents, routers, or LLMs directly in application code.</div>
+      <div class="card-usage"><div class="usage-label">Used in</div><div class="usage-tags"><span class="usage-tag">AgentRegistry</span><span class="usage-tag">RouterFactory</span><span class="usage-tag">LLMFactory</span><span class="usage-tag">ModelRouterFactory</span></div></div>
+      <div class="card-footer"><a href="https://github.com/k9aif/k9aif-patterns/tree/main/k9aif-patterns/factory-pattern" class="card-link" target="_blank" rel="noopener">View pattern &rarr;</a></div>
+    </div>
 
+    <div class="pattern-card" data-cat="governance">
+      <div class="card-top"><div class="card-icon">&#x221E;</div><span class="card-category">Governance &middot; Execution</span></div>
+      <div class="card-name">Runtime Agent Loader Pattern</div>
+      <div class="card-intent">Load and wire agents, squads, and orchestrators from declarative YAML at runtime &mdash; change orchestration without changing code.</div>
+      <div class="card-usage"><div class="usage-label">Used in</div><div class="usage-tags"><span class="usage-tag">SquadLoader</span><span class="usage-tag">AgentLoader</span><span class="usage-tag">_load_squad()</span><span class="usage-tag">k9_generator.sh</span></div></div>
+      <div class="card-footer"><a href="https://github.com/k9aif/k9aif-patterns/tree/main/k9aif-patterns/runtime-agent-loader-pattern" class="card-link" target="_blank" rel="noopener">View pattern &rarr;</a></div>
+    </div>
+
+    <div class="pattern-card" data-cat="integration">
+      <div class="card-top"><div class="card-icon">&#x21CC;</div><span class="card-category">Integration</span></div>
+      <div class="card-name">External Connector Pattern</div>
+      <div class="card-intent">Access external systems through a standardised connector layer with governance enforced at the boundary &mdash; APIs, databases, MCP servers.</div>
+      <div class="card-usage"><div class="usage-label">Used in</div><div class="usage-tags"><span class="usage-tag">MCPHttpConnector</span><span class="usage-tag">MCPStdioConnector</span><span class="usage-tag">BaseMCPAgent</span><span class="usage-tag">Docling OCR</span></div></div>
+      <div class="card-footer"><a href="https://github.com/k9aif/k9aif-patterns/tree/main/k9aif-patterns/external-connector-pattern" class="card-link" target="_blank" rel="noopener">View pattern &rarr;</a></div>
+    </div>
+
+  </div>
 </div>
 
 <footer>
-  <span>&copy; 2026 K9X.ai &middot; Ravi Natarajan &middot; Apache 2.0</span>
-  <div class="footer-links">
-    <a href="https://k9x.ai">k9x.ai</a>
-    <a href="https://github.com/k9aif/k9-aif-framework" target="_blank" rel="noopener">Framework</a>
-    <a href="https://github.com/k9aif/k9aif-patterns" target="_blank" rel="noopener">GitHub</a>
-    <a href="https://pydocs.k9x.ai" target="_blank" rel="noopener">Docs</a>
+  <div class="footer-inner">
+    <div class="footer-brand">K9X<span>.ai</span></div>
+    <div class="footer-links">
+      <a href="https://k9x.ai">k9x.ai</a>
+      <a href="https://blog.k9x.ai">Blog</a>
+      <a href="https://pydocs.k9x.ai/starthere/">Docs</a>
+      <a href="https://graph.k9x.ai">Graph Explorer</a>
+      <a href="https://github.com/k9aif/k9-aif-framework" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+  <div class="footer-copy">
+    <span>&copy; 2026 K9X.ai &middot; Ravi Natarajan &middot; Apache 2.0</span>
+    <span>Architecture patterns for governed agentic AI systems.</span>
   </div>
 </footer>
 
