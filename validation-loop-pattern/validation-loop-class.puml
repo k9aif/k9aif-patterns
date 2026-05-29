@@ -1,0 +1,85 @@
+@startuml validation-loop-class
+!theme plain
+skinparam backgroundColor #FAFAFA
+skinparam defaultFontName Arial
+skinparam ClassBackgroundColor #f7f4ef
+skinparam ClassBorderColor #444444
+
+title Validation Loop Pattern — Class Structure
+
+abstract class BaseAgent {
+  + config: dict
+  + execute(payload): dict
+}
+
+abstract class BaseValidationLoopAgent {
+  + max_iterations: int
+  + confidence_threshold: float
+  + {abstract} generate_hypothesis(loop_ctx): Any
+  + {abstract} run_validation(hypothesis, loop_ctx): Any
+  + {abstract} evaluate_observation(result, loop_ctx): dict
+  + {abstract} should_continue(observation, loop_ctx): ValidationDisposition
+  + {abstract} finalize(loop_ctx): ValidationLoopResult
+  + escalate(loop_ctx): ValidationLoopResult
+  + fail(loop_ctx): ValidationLoopResult
+}
+
+class K9ValidationLoopAgent {
+  + generate_hypothesis(loop_ctx): str
+  + run_validation(hypothesis, loop_ctx): str
+  + evaluate_observation(result, loop_ctx): dict
+  + should_continue(observation, loop_ctx): ValidationDisposition
+  + finalize(loop_ctx): ValidationLoopResult
+}
+
+class "YourValidationAgent\n(SBB)" as SBB {
+  + run_validation(hypothesis, loop_ctx): Any
+  + should_continue(observation, loop_ctx): ValidationDisposition
+  + finalize(loop_ctx): ValidationLoopResult
+}
+
+class ValidationLoopContext {
+  + payload: dict
+  + iteration: int
+  + steps: list[ValidationLoopStep]
+}
+
+class ValidationLoopStep {
+  + hypothesis: Any
+  + observation: dict
+  + confidence: float
+  + disposition: ValidationDisposition
+}
+
+class ValidationLoopResult {
+  + disposition: ValidationDisposition
+  + output: Any
+  + iterations: int
+  + final_confidence: float
+  + evidence: list[str]
+}
+
+enum ValidationDisposition {
+  CONTINUE
+  FINALIZE
+  ESCALATE
+  FAIL
+}
+
+BaseAgent <|-- BaseValidationLoopAgent
+BaseValidationLoopAgent <|-- K9ValidationLoopAgent
+BaseValidationLoopAgent <|-- SBB
+BaseValidationLoopAgent ..> ValidationLoopContext : uses
+ValidationLoopContext *-- ValidationLoopStep
+BaseValidationLoopAgent ..> ValidationLoopResult : returns
+ValidationLoopResult --> ValidationDisposition
+
+note bottom of SBB
+  Override run_validation() to
+  plug in your domain tool
+  (rule engine, LLM, API).
+  Override should_continue()
+  for domain confidence logic.
+end note
+
+@enduml

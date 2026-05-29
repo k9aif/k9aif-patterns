@@ -1,0 +1,71 @@
+@startuml critic-actor-class
+!theme plain
+skinparam backgroundColor #FAFAFA
+skinparam defaultFontName Arial
+skinparam ClassBackgroundColor #f7f4ef
+skinparam ClassBorderColor #444444
+
+title Critic-Actor Pattern — Class Structure
+
+abstract class BaseAgent {
+  + config: dict
+  + execute(payload): dict
+}
+
+abstract class BaseCriticActorAgent {
+  + max_rounds: int
+  + {abstract} generate(payload): Any
+  + {abstract} critique(draft): CritiqueResult
+  + {abstract} refine(draft, feedback): Any
+  + {abstract} should_accept(result): bool
+  + {abstract} finalize(draft): CriticActorResult
+  + escalate(): CriticActorResult
+}
+
+class K9CriticActorAgent {
+  + generate(payload): str
+  + critique(draft): CritiqueResult
+  + refine(draft, feedback): str
+  + should_accept(result): bool
+  + finalize(draft): CriticActorResult
+}
+
+class "YourCriticActorAgent\n(SBB)" as SBB {
+  + critique(draft): CritiqueResult
+  + should_accept(result): bool
+}
+
+class CritiqueResult {
+  + accepted: bool
+  + feedback: str
+  + score: float
+}
+
+class CriticActorResult {
+  + output: Any
+  + accepted: bool
+  + rounds: int
+  + disposition: CriticActorDisposition
+}
+
+enum CriticActorDisposition {
+  FINALIZE
+  ESCALATE
+  FAIL
+}
+
+BaseAgent <|-- BaseCriticActorAgent
+BaseCriticActorAgent <|-- K9CriticActorAgent
+BaseCriticActorAgent <|-- SBB
+BaseCriticActorAgent ..> CritiqueResult : produces
+BaseCriticActorAgent ..> CriticActorResult : returns
+CriticActorResult --> CriticActorDisposition
+
+note bottom of SBB
+  Override only critique()
+  and should_accept() for
+  domain-specific validation.
+  Everything else inherited.
+end note
+
+@enduml
