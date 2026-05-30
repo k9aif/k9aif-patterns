@@ -18,6 +18,7 @@ PATTERNS = [
     {"id": "model-router-pattern",           "cat": "Inference",              "cat_slug": "inference"},
     {"id": "inference-pattern",              "cat": "Inference",              "cat_slug": "inference"},
     {"id": "provider-adapter-pattern",       "cat": "Inference · Integration","cat_slug": "inference"},
+    {"id": "llm-invoke-pattern",             "cat": "Inference",              "cat_slug": "inference"},
     {"id": "factory-pattern",               "cat": "Governance",             "cat_slug": "governance"},
     {"id": "runtime-agent-loader-pattern",  "cat": "Governance",             "cat_slug": "governance"},
     {"id": "external-connector-pattern",    "cat": "Integration",            "cat_slug": "integration"},
@@ -173,6 +174,27 @@ Configuration-driven loading separates what the system does from how it is assem
         "used_in": ["SquadLoader", "AgentLoader", "_load_squad()", "k9_generator.sh", "all EOC squads", "all DoW squads", "k9-aif-intake"],
         "github": "runtime-agent-loader-pattern",
     },
+    "llm-invoke-pattern": {
+        "title": "LLM Invoke Chain Pattern",
+        "intent": "Provide a single, governed entry point for all LLM inference — llm_invoke() composes Model Router, LLM Factory, and Inference Layer into one audited call. Agents never touch the factory or router directly.",
+        "image": "llm-invoke-pattern/llm-invoke-class.png",
+        "motivation": """Every agent that calls an LLM faces the same concerns: which model, what cost, what latency, is governance satisfied, has the decision been recorded? Solving this inline in every agent creates duplication, inconsistency, and ungoverned inference.
+
+llm_invoke() is the single composition point. It routes through K9ModelRouter, resolves the model via LLMFactory, invokes the LLM, and persists the routing decision to the audit store — in one call. Agents are decoupled from all of it.""",
+        "structure": [
+            "Agent calls llm_invoke(config, InferenceRequest)",
+            "ModelRouterFactory.get_router(config) returns cached K9ModelRouter",
+            "K9ModelRouter.route(request) scores catalog models and returns RouteDecision",
+            "LLMFactory.get(model_alias) returns cached OllamaLLM instance",
+            "OllamaLLM.invoke(prompt) calls the model and returns raw response",
+            "RoutingStateStore persists RouteDecision with latency and scores",
+            "InferenceResponse returned to agent",
+        ],
+        "key_concepts": ["llm_invoke()", "InferenceRequest", "InferenceResponse", "ModelRouterFactory", "K9ModelRouter", "LLMFactory", "BaseLLM", "RouteDecision", "RoutingStateStore"],
+        "used_in": ["Every BaseAgent.execute() in K9-AIF", "All EOC agents", "All DoW agents", "K9ValidationLoopAgent.run_validation()", "K9CriticActorAgent.generate() and refine()"],
+        "github": "llm-invoke-pattern",
+    },
+
     "external-connector-pattern": {
         "title": "External Connector Pattern",
         "intent": "Access external systems through a standardised connector layer with governance enforced at the integration boundary — APIs, databases, MCP tool servers, messaging systems.",
@@ -304,7 +326,7 @@ JS = """
 
 SIDE_PANEL_CATS = [
     ("EXECUTION", ["agent-squad-pattern", "validation-loop-pattern", "critic-actor-pattern"]),
-    ("INFERENCE", ["model-router-pattern", "inference-pattern", "provider-adapter-pattern"]),
+    ("INFERENCE", ["model-router-pattern", "inference-pattern", "provider-adapter-pattern", "llm-invoke-pattern"]),
     ("GOVERNANCE", ["factory-pattern", "runtime-agent-loader-pattern"]),
     ("INTEGRATION", ["external-connector-pattern"]),
 ]
