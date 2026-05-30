@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>K9-AIF Architecture Foundation</title>
+  <meta name="description" content="A well-architected guide for deploying K9-AIF governed agentic AI systems — security, reliability, cost optimisation, performance efficiency, and operational excellence.">
+  <meta name="author" content="Ravi Natarajan">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #f7f4ef; --bg-card: #fff; --bg-tint: #f0ece4;
+      --border: #ddd8cf; --border-l: #e8e3da;
+      --ink: #1a1a1a; --ink-2: #3a3a3a; --ink-3: #666056; --muted: #9a9288;
+      --blue: #1C69D4; --blue-bg: rgba(28,105,212,0.06);
+      --gold: #7a5c1e; --gold-bg: rgba(122,92,30,0.07);
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--ink-2); font-family: 'Inter', Arial, system-ui, sans-serif; font-size: 15px; line-height: 1.75; -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-decoration: none; }
+
+    /* Nav */
+    .site-nav { background: #0f1720; border-bottom: 1px solid rgba(0,230,255,0.08); }
+    .nav-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 0 32px; flex-wrap: wrap; }
+    .nav-brand { font-size: 1rem; font-weight: 700; color: #e8edf0; text-decoration: none; letter-spacing: 0.04em; padding: 14px 0; }
+    .nav-brand span { color: #00E6FF; }
+    .nav-links { display: flex; }
+    .nav-links a { display: inline-block; padding: 13px 22px; color: #6f8a96; text-decoration: none; font-size: 0.88rem; border-left: 1px solid rgba(0,230,255,0.08); transition: color .2s, background .2s; }
+    .nav-links a:last-child { border-right: 1px solid rgba(0,230,255,0.08); }
+    .nav-links a:hover { color: #00E6FF; background: rgba(0,230,255,0.05); }
+
+    /* Page */
+    .page { max-width: 1100px; margin: 0 auto; padding: 0 32px; }
+
+    /* Article header */
+    .article-header { max-width: 760px; padding: 64px 0 48px; border-bottom: 1px solid var(--border); margin-bottom: 52px; }
+    .article-kicker { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.24em; text-transform: uppercase; color: var(--blue); margin-bottom: 20px; }
+    .article-title { font-size: clamp(26px, 4vw, 40px); font-weight: 800; color: var(--ink); letter-spacing: -0.5px; line-height: 1.15; margin-bottom: 16px; }
+    .article-intro { font-size: 1rem; color: var(--ink-3); line-height: 1.75; max-width: 680px; }
+
+    /* Pillars grid */
+    .pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 56px; }
+
+    .pillar-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 28px 24px; transition: border-color .2s, box-shadow .2s; }
+    .pillar-card:hover { border-color: #c8c0b4; box-shadow: 0 4px 20px rgba(0,0,0,0.07); }
+    .pillar-card.featured { border-left: 3px solid var(--blue); }
+
+    .pillar-num { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+    .pillar-title { font-size: 1.05rem; font-weight: 700; color: var(--ink); margin-bottom: 14px; display: flex; align-items: center; gap: 10px; }
+    .pillar-icon { font-size: 20px; }
+    .pillar-body { font-size: 13.5px; color: var(--ink-3); line-height: 1.7; }
+    .pillar-body ul { list-style: none; padding: 0; margin-top: 10px; }
+    .pillar-body ul li { padding: 5px 0 5px 18px; position: relative; border-bottom: 1px solid var(--border-l); font-size: 13px; }
+    .pillar-body ul li:last-child { border-bottom: none; }
+    .pillar-body ul li::before { content: "→"; position: absolute; left: 0; color: var(--blue); font-size: 11px; top: 7px; }
+    .pillar-body code { font-family: 'Courier New', monospace; font-size: 12px; background: var(--blue-bg); color: var(--blue); padding: 1px 5px; border-radius: 3px; }
+
+    /* ESB note */
+    .esb-note { background: var(--gold-bg); border: 1px solid rgba(122,92,30,0.20); border-radius: 10px; padding: 20px 24px; margin-bottom: 48px; font-size: 14px; color: var(--ink-3); line-height: 1.7; }
+    .esb-note strong { color: var(--gold); }
+
+    /* AWS comparison */
+    .comparison { margin-bottom: 56px; }
+    .comparison h2 { font-size: 1.1rem; font-weight: 700; color: var(--ink); margin-bottom: 16px; }
+    table { width: 100%; border-collapse: collapse; font-size: 13.5px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+    th { background: var(--bg-tint); color: var(--ink); font-weight: 700; text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--border); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; }
+    td { padding: 11px 16px; border-bottom: 1px solid var(--border-l); color: var(--ink-3); vertical-align: top; }
+    tr:last-child td { border-bottom: none; }
+    td:first-child { font-weight: 600; color: var(--ink-2); white-space: nowrap; }
+    td code { font-family: 'Courier New', monospace; font-size: 11.5px; background: var(--blue-bg); color: var(--blue); padding: 1px 5px; border-radius: 3px; }
+
+    /* Footer */
+    footer { background: #0f1720; border-top: 1px solid rgba(0,230,255,0.08); padding: 40px 32px; margin-top: 64px; }
+    .footer-inner { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }
+    .footer-brand { font-weight: 700; color: #e8edf0; font-size: 0.95rem; }
+    .footer-brand span { color: #00E6FF; }
+    .footer-links { display: flex; gap: 20px; flex-wrap: wrap; }
+    .footer-links a { font-size: 0.82rem; color: #6f8a96; text-decoration: none; transition: color .2s; }
+    .footer-links a:hover { color: #00E6FF; }
+    .footer-copy { max-width: 1100px; margin: 16px auto 0; padding-top: 14px; border-top: 1px solid rgba(0,230,255,0.08); font-size: 0.72rem; color: #4d6270; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+
+    @media (max-width: 900px) { .pillars { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 580px) { .pillars { grid-template-columns: 1fr; } .page { padding: 0 20px; } nav { padding: 0 16px; } footer { padding: 32px 20px; } .nav-inner { padding: 0 20px; } .article-header { padding: 40px 0 32px; } }
+  </style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="nav-inner">
+    <a href="https://k9x.ai" class="nav-brand">K9X<span>.ai</span></a>
+    <div class="nav-links">
+      <a href="https://k9x.ai">Home</a>
+      <a href="https://pydocs.k9x.ai/starthere/">Docs</a>
+      <a href="https://patterns.k9x.ai">Patterns</a>
+      <a href="https://blog.k9x.ai">Blog</a>
+      <a href="https://github.com/k9aif/k9-aif-framework" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+</nav>
+
+<div class="page">
+
+  <header class="article-header">
+    <div class="article-kicker">Architecture Foundation</div>
+    <h1 class="article-title">K9-AIF Architecture Foundation</h1>
+    <p class="article-intro">
+      A set of architectural principles for deploying governed, enterprise-scale agentic AI systems with K9-AIF.
+      Structured around the same pillars as AWS Well-Architected — because the concerns are identical,
+      whether the workload is data pipelines or autonomous agents.
+    </p>
+  </header>
+
+  <div class="esb-note">
+    <strong>On the Architecture Bus.</strong>
+    The K9-AIF Architecture Bus evolves the Enterprise Service Bus pattern &mdash; routing, mediation,
+    and governed execution &mdash; redesigned for agentic AI systems where the payload is reasoning, not just data.
+    Hub-and-spoke became ESB. ESB became federated. K9-AIF Architecture Bus applies those decades of
+    hard-won lessons to governed multi-agent orchestration.
+  </div>
+
+  <div class="pillars">
+
+    <div class="pillar-card featured">
+      <div class="pillar-num">Pillar 01</div>
+      <div class="pillar-title"><span class="pillar-icon">⚖</span>Security</div>
+      <div class="pillar-body">
+        Governance is a first-class architectural property, not a post-deployment addition.
+        Every agent boundary is policy-checked before action executes.
+        <ul>
+          <li>Zero Trust Execution at every agent boundary</li>
+          <li><code>SecretManagerFactory</code> → <code>AwsSecretAdapter</code> (AWS Secrets Manager)</li>
+          <li>No credentials in config.yaml — environment variables only</li>
+          <li>IAM roles for RDS, MSK (Kafka), S3 — never static keys</li>
+          <li>Governance pipeline enforces pre/post process on every LLM call</li>
+          <li><code>K9_ENV=production</code> raises <code>PermissionError</code> on missing governance</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="pillar-card featured">
+      <div class="pillar-num">Pillar 02</div>
+      <div class="pillar-title"><span class="pillar-icon">◎</span>Reliability</div>
+      <div class="pillar-body">
+        Agents are stateless. Squads are restartable. The bus is durable.
+        Failure at any component does not corrupt the execution record.
+        <ul>
+          <li>Kafka / Amazon MSK for event durability — no message lost on failure</li>
+          <li><code>K9ValidationLoopAgent</code> — retry logic is architectural, not ad hoc</li>
+          <li>Stateless agents + <code>SquadLoader</code> — any instance restarts cleanly</li>
+          <li>RDS PostgreSQL for routing state — persists across container restarts</li>
+          <li>Multiple orchestrators consuming Kafka = horizontal failover</li>
+          <li>Dead-letter queues for escalated or failed agent flows</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="pillar-card featured">
+      <div class="pillar-num">Pillar 03</div>
+      <div class="pillar-title"><span class="pillar-icon">⬡</span>Performance Efficiency</div>
+      <div class="pillar-body">
+        Route the right request to the right model at the right latency tier.
+        Cache aggressively. Scale horizontally.
+        <ul>
+          <li><code>K9ModelRouter</code> latency_budget scoring — fastest model when latency matters</li>
+          <li><code>LLMFactory</code> singleton caching — no LLM re-instantiation per request</li>
+          <li>Kafka async pipeline — non-blocking squad execution</li>
+          <li>ECS Fargate / Lambda for agents — scale per load</li>
+          <li>Squad flow parallelisation for independent agents</li>
+          <li>Amazon Bedrock / Watsonx inference at scale via Provider Adapter</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="pillar-card">
+      <div class="pillar-num">Pillar 04</div>
+      <div class="pillar-title"><span class="pillar-icon">∞</span>Cost Optimisation</div>
+      <div class="pillar-body">
+        Model selection is a governed, auditable cost decision — not a hardcoded choice.
+        <ul>
+          <li><code>K9ModelRouter</code> cost_profile scoring — cheaper model for simple tasks</li>
+          <li>Routing state store tracks cost per decision — auditable spend</li>
+          <li>Provider switching via config — move from GPT-4 to Granite by config change</li>
+          <li>Smaller models for classification / routing tasks</li>
+          <li>Reserved capacity for predictable inference workloads</li>
+          <li>Squad flow — only runs agents required, no unnecessary inference</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="pillar-card">
+      <div class="pillar-num">Pillar 05</div>
+      <div class="pillar-title"><span class="pillar-icon">◈</span>Operational Excellence</div>
+      <div class="pillar-body">
+        Every routing decision is observable. Every agent boundary is instrumented.
+        The system can be understood and diagnosed without code changes.
+        <ul>
+          <li><code>k9aif doctor</code> + <code>k9aif verify</code> — health checks in the CLI</li>
+          <li><code>publish_event()</code> at every boundary — CloudWatch / OpenTelemetry ready</li>
+          <li>Routing state store — full audit trail for every model selection</li>
+          <li><code>K9_ENV</code> flag — governance mode per environment</li>
+          <li>YAML-driven squads — change orchestration without redeployment</li>
+          <li>Graph.k9x.ai — architecture as a navigable, auditable knowledge graph</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="pillar-card">
+      <div class="pillar-num">Pillar 06</div>
+      <div class="pillar-title"><span class="pillar-icon">⬤</span>Sustainability</div>
+      <div class="pillar-body">
+        Compute is not free. Every unnecessary inference call has an energy cost.
+        Governed model routing reduces waste by design.
+        <ul>
+          <li>Cost-aware routing reduces over-provisioned model usage</li>
+          <li>Smaller models for lower-complexity tasks — lower compute, lower carbon</li>
+          <li>Validation loop — stops iterating when confidence is sufficient</li>
+          <li>Caching at LLMFactory — eliminates redundant model instantiation</li>
+          <li>Right-size inference — match model capability to task complexity</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="comparison">
+    <h2>K9-AIF vs AWS Well-Architected — Pillar Mapping</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Pillar</th>
+          <th>AWS mechanism</th>
+          <th>K9-AIF mechanism</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Security</td>
+          <td>IAM, KMS, Secrets Manager, VPC</td>
+          <td><code>Zero Trust Execution</code>, <code>GovernancePipeline</code>, <code>AwsSecretAdapter</code></td>
+        </tr>
+        <tr>
+          <td>Reliability</td>
+          <td>Multi-AZ, SQS/SNS, Auto Scaling</td>
+          <td>Kafka durability, <code>K9ValidationLoopAgent</code>, stateless agents</td>
+        </tr>
+        <tr>
+          <td>Performance</td>
+          <td>CloudFront, ElastiCache, right-sizing</td>
+          <td><code>K9ModelRouter</code> latency scoring, <code>LLMFactory</code> caching</td>
+        </tr>
+        <tr>
+          <td>Cost</td>
+          <td>Reserved instances, Savings Plans, tagging</td>
+          <td><code>K9ModelRouter</code> cost_profile scoring, routing audit trail</td>
+        </tr>
+        <tr>
+          <td>Operations</td>
+          <td>CloudWatch, X-Ray, Config, Systems Manager</td>
+          <td><code>publish_event()</code>, routing state store, <code>k9aif doctor</code></td>
+        </tr>
+        <tr>
+          <td>Sustainability</td>
+          <td>Graviton, Spot, right-sizing</td>
+          <td>Governed model routing, validation loop, LLMFactory caching</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">K9X<span>.ai</span></div>
+    <div class="footer-links">
+      <a href="https://k9x.ai">Home</a>
+      <a href="https://patterns.k9x.ai">Patterns</a>
+      <a href="https://pydocs.k9x.ai/starthere/">Docs</a>
+      <a href="https://blog.k9x.ai">Blog</a>
+      <a href="https://github.com/k9aif/k9-aif-framework" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+  <div class="footer-copy">
+    <span>&copy; 2026 K9X.ai &middot; Ravi Natarajan &middot; Apache 2.0</span>
+    <span>Architecture-first framework for governed agentic AI systems.</span>
+  </div>
+</footer>
+
+</body>
+</html>
