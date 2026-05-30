@@ -64,7 +64,7 @@ Standard one-shot agents cannot model this. The Validation Loop Pattern gives ag
     "critic-actor-pattern": {
         "title": "Critic-Actor Pattern",
         "intent": "An Actor produces a draft output; a Critic evaluates it and provides structured feedback; the Actor refines — repeating until the Critic accepts the output or a round cap triggers escalation.",
-        "image": None,
+        "image": "critic-actor-pattern/critic-actor-class.png",
         "motivation": """Many agent tasks require quality refinement, not just validation. Contract drafting, report writing, policy review, and code generation benefit from structured critique cycles rather than single-pass generation.
 
 The Critic-Actor Pattern separates generation from evaluation, creating a feedback loop that converges on acceptable quality. Unlike the Validation Loop (which tests correctness), the Critic-Actor pattern improves quality through structured critique.""",
