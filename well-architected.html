@@ -82,7 +82,55 @@
     .footer-links a:hover { color: #00E6FF; }
     .footer-copy { max-width: 1100px; margin: 16px auto 0; padding-top: 14px; border-top: 1px solid rgba(0,230,255,0.08); font-size: 0.72rem; color: #4d6270; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
 
+    /* Evolution timeline — standalone */
+    .evolution-section { margin:0 0 28px; padding:24px 28px; background:var(--bg-card); border:1px solid var(--border); border-radius:14px; }
+    .evolution-label { font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--muted); margin-bottom:20px; text-align:center; }
+
+    /* Architecture Bus visual */
+    .bus-visual { background:#0a1520; border-radius:16px; padding:36px 32px 28px; margin:0 0 48px; box-shadow:0 4px 28px rgba(0,0,0,0.18); }
+
+    /* Timeline */
+    .bus-timeline { display:flex; align-items:flex-start; justify-content:center; gap:0; margin-bottom:36px; flex-wrap:wrap; }
+    .bus-era { text-align:center; padding:0 16px; max-width:160px; }
+    .bus-era--current { border:1px solid rgba(0,230,255,0.30); border-radius:10px; padding:10px 14px; background:rgba(0,230,255,0.04); }
+    .bus-era--current .bus-era-name { color:#00E6FF; }
+    .bus-era--current .bus-era-date { color:rgba(0,230,255,0.6); }
+    .bus-era-name { font-size:12px; font-weight:700; color:#94a3b8; margin-bottom:3px; letter-spacing:0.1px; }
+    .bus-era-date { font-size:10px; color:#4d6880; margin-bottom:4px; letter-spacing:0.5px; }
+    .bus-era-desc { font-size:11px; color:#3d5568; line-height:1.4; }
+    .bus-era-arrow { color:#e11d48; font-size:22px; padding:0 4px; align-self:center; margin-bottom:12px; flex-shrink:0; font-weight:700; }
+    .bus-era-arrow--accent { color:#e11d48; }
+
+    /* Bus diagram */
+    .bus-top-row,.bus-bottom-row { display:flex; justify-content:center; gap:6px; flex-wrap:nowrap; }
+    .bus-consumer,.bus-component {
+      flex:1; min-width:0; text-align:center; padding:8px 6px;
+      font-size:11px; font-weight:600; border-radius:7px;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .bus-consumer { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); color:#64748b; }
+    .bus-consumer--accent { border-color:rgba(0,230,255,0.20); color:rgba(0,230,255,0.7); background:rgba(0,230,255,0.05); }
+    .bus-component { background:rgba(0,230,255,0.07); border:1px solid rgba(0,230,255,0.22); color:#94a3b8; }
+    .bus-component--gov { border-color:rgba(212,175,55,0.30); color:#c9a52a; background:rgba(212,175,55,0.05); }
+
+    .bus-connectors-top,.bus-connectors-bottom { display:flex; justify-content:center; gap:6px; height:20px; }
+    .bus-connectors-top span,.bus-connectors-bottom span { flex:1; border-left:1px dashed rgba(0,230,255,0.15); margin:0 auto; width:0; }
+
+    .bus-rail {
+      background:linear-gradient(90deg,transparent,rgba(0,230,255,0.10) 20%,rgba(0,230,255,0.15) 50%,rgba(0,230,255,0.10) 80%,transparent);
+      border:1px solid rgba(0,230,255,0.45); border-radius:10px; padding:16px 20px;
+      text-align:center; margin:0;
+      box-shadow:0 0 24px rgba(0,230,255,0.08), inset 0 1px 0 rgba(0,230,255,0.12);
+    }
+    .bus-rail-label { font-size:15px; font-weight:800; color:#00E6FF; letter-spacing:2.5px; margin-bottom:4px; }
+    .bus-rail-tag { font-size:10px; font-weight:600; letter-spacing:1.8px; color:#3d6070; text-transform:uppercase; }
+
+    .bus-payload-row { display:flex; align-items:center; justify-content:center; gap:10px; margin-top:14px; }
+    .bus-payload { font-size:11px; font-weight:600; color:#3d8060; letter-spacing:0.5px; }
+    .bus-payload--dim { font-size:10px; color:#2d5045; }
+
     @media (max-width: 900px) { .pillars { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 700px) { .bus-top-row,.bus-bottom-row { flex-wrap:wrap; } .bus-consumer,.bus-component { min-width:70px; flex:0 0 auto; } .bus-connectors-top,.bus-connectors-bottom { display:none; } .bus-timeline { justify-content:flex-start; } }
     @media (max-width: 580px) { .pillars { grid-template-columns: 1fr; } .page { padding: 0 20px; } nav { padding: 0 16px; } footer { padding: 32px 20px; } .nav-inner { padding: 0 20px; } .article-header { padding: 40px 0 32px; } }
   </style>
 </head>
@@ -123,10 +171,74 @@
     The <strong>K9-AIF Architecture Bus</strong> is the next step in that lineage — purpose-built for governed agentic AI orchestration, where the payload is not a message but a reasoning chain, and governance must be enforced at every agent boundary, not just at the integration layer.
   </div>
 
-  <figure style="margin:0 0 48px;background:#0a1520;border-radius:14px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.12);">
-    <img src="k9-aif-architecture-bus.jpg" alt="K9-AIF Architecture Bus evolution" style="width:100%;display:block;">
-    <figcaption style="padding:10px 18px;font-size:12px;color:#6f8a96;font-style:italic;border-top:1px solid rgba(0,230,255,0.08);">The K9-AIF Architecture Bus — evolution of enterprise integration patterns applied to governed agentic AI</figcaption>
-  </figure>
+  <!-- Evolution timeline — standalone section -->
+  <div class="evolution-section">
+    <div class="evolution-label">30 Years of Evolution</div>
+    <div class="bus-timeline">
+      <div class="bus-era">
+        <div class="bus-era-name">Hub-and-Spoke</div>
+        <div class="bus-era-date">1990s</div>
+        <div class="bus-era-desc">Central hub, single point of failure</div>
+      </div>
+      <div class="bus-era-arrow">→</div>
+      <div class="bus-era">
+        <div class="bus-era-name">Enterprise Service Bus</div>
+        <div class="bus-era-date">Early 2000s</div>
+        <div class="bus-era-desc">Standards-based, SOA enabled</div>
+      </div>
+      <div class="bus-era-arrow">→</div>
+      <div class="bus-era">
+        <div class="bus-era-name">Federated ESB</div>
+        <div class="bus-era-date">Mid-2000s–2010s</div>
+        <div class="bus-era-desc">Multiple buses, central governance</div>
+      </div>
+      <div class="bus-era-arrow bus-era-arrow--accent">→</div>
+      <div class="bus-era bus-era--current">
+        <div class="bus-era-name">K9-AIF Architecture Bus</div>
+        <div class="bus-era-date">2024+</div>
+        <div class="bus-era-desc">Governed agentic orchestration</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Architecture Bus visual -->
+  <div class="bus-visual">
+
+    <!-- Bus diagram -->
+    <div class="bus-diagram">
+      <div class="bus-top-row">
+        <div class="bus-consumer">Web Apps</div>
+        <div class="bus-consumer">APIs</div>
+        <div class="bus-consumer bus-consumer--accent">CrewAI</div>
+        <div class="bus-consumer bus-consumer--accent">LangChain</div>
+        <div class="bus-consumer bus-consumer--accent">IBM Watsonx</div>
+        <div class="bus-consumer">BPMN / Blueworks</div>
+      </div>
+      <div class="bus-connectors-top">
+        <span></span><span></span><span></span><span></span><span></span><span></span>
+      </div>
+      <div class="bus-rail">
+        <div class="bus-rail-label">K9-AIF ARCHITECTURE BUS</div>
+        <div class="bus-rail-tag">EVENT DRIVEN &nbsp;&middot;&nbsp; GOVERNED &nbsp;&middot;&nbsp; OBSERVABLE &nbsp;&middot;&nbsp; SECURE</div>
+      </div>
+      <div class="bus-connectors-bottom">
+        <span></span><span></span><span></span><span></span><span></span><span></span>
+      </div>
+      <div class="bus-bottom-row">
+        <div class="bus-component">Router</div>
+        <div class="bus-component">Orchestrator</div>
+        <div class="bus-component">Squad</div>
+        <div class="bus-component">Agent</div>
+        <div class="bus-component bus-component--gov">Governance</div>
+        <div class="bus-component bus-component--gov">Zero Trust</div>
+      </div>
+      <div class="bus-payload-row">
+        <span class="bus-payload">Payload: Reasoning Chain</span>
+        <span class="bus-payload bus-payload--dim">not just data</span>
+      </div>
+    </div>
+
+  </div>
 
   <div class="pillars">
 
