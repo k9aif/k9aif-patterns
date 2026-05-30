@@ -343,54 +343,7 @@
         </ul>
       </div>
     </div>
-
   </div>
-
-  <div class="comparison">
-    <h2>K9-AIF vs AWS Well-Architected — Pillar Mapping</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>Pillar</th>
-          <th>AWS mechanism</th>
-          <th>K9-AIF mechanism</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Security</td>
-          <td>IAM, KMS, Secrets Manager, VPC</td>
-          <td><code>Zero Trust Execution</code>, <code>GovernancePipeline</code>, <code>AwsSecretAdapter</code></td>
-        </tr>
-        <tr>
-          <td>Reliability</td>
-          <td>Multi-AZ, SQS/SNS, Auto Scaling</td>
-          <td>Kafka durability, <code>K9ValidationLoopAgent</code>, stateless agents</td>
-        </tr>
-        <tr>
-          <td>Performance</td>
-          <td>CloudFront, ElastiCache, right-sizing</td>
-          <td><code>K9ModelRouter</code> latency scoring, <code>LLMFactory</code> caching</td>
-        </tr>
-        <tr>
-          <td>Cost</td>
-          <td>Reserved instances, Savings Plans, tagging</td>
-          <td><code>K9ModelRouter</code> cost_profile scoring, routing audit trail</td>
-        </tr>
-        <tr>
-          <td>Operations</td>
-          <td>CloudWatch, X-Ray, Config, Systems Manager</td>
-          <td><code>publish_event()</code>, routing state store, <code>k9aif doctor</code></td>
-        </tr>
-        <tr>
-          <td>Sustainability</td>
-          <td>Graviton, Spot, right-sizing</td>
-          <td>Governed model routing, validation loop, LLMFactory caching</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
 </div>
 
 <footer>
