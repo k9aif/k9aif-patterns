@@ -45,7 +45,7 @@ The Squad pattern introduces a formal coordination layer between orchestrators a
     "validation-loop-pattern": {
         "title": "Validation Loop Pattern",
         "intent": "Enable an agent to iteratively test a hypothesis, observe the result, and decide whether to continue — repeating until confidence is sufficient, a definitive result is reached, or the iteration cap is hit.",
-        "image": "validation-loop-pattern/k9x-framework-validation-loop-pattern.png",
+        "image": "validation-loop-pattern/validation-loop-class.png",
         "motivation": """Some problems cannot be solved in a single pass. Fraud signal correlation, compliance gap analysis, and document confidence scoring all require iterative convergence — the agent must test something, observe the outcome, and decide whether to try again.
 
 Standard one-shot agents cannot model this. The Validation Loop Pattern gives agents a structured skeleton for problems where the answer must be earned through iteration rather than computed in a single step.""",
