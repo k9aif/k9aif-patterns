@@ -104,7 +104,7 @@
     <h1 class="article-title">K9-AIF Pattern Catalog</h1>
     <p class="article-desc">Reusable architectural patterns for building governed, enterprise-scale agentic AI systems. Framework-agnostic. Production-tested in K9-AIF.</p>
     <div class="article-meta">
-      <span class="meta-tag">9 Patterns</span>
+      <span class="meta-tag">10 Patterns</span>
       <span class="meta-tag">Apache 2.0</span>
       <span class="meta-tag">GoF &middot; POSA &middot; TOGAF lineage</span>
     </div>
@@ -113,6 +113,7 @@
   <div class="filter-bar">
     <button class="filter-btn active" data-filter="all">All</button>
     <button class="filter-btn" data-filter="execution">Execution</button>
+    <button class="filter-btn" data-filter="routing">Routing</button>
     <button class="filter-btn" data-filter="inference">Inference</button>
     <button class="filter-btn" data-filter="integration">Integration</button>
     <button class="filter-btn" data-filter="governance">Governance</button>
@@ -142,6 +143,14 @@
       <div class="card-intent">An Actor produces a draft; a Critic evaluates it; the Actor refines &mdash; repeating until quality bar is met or escalation triggers.</div>
       <div class="card-usage"><div class="usage-label">Used in</div><div class="usage-tags"><span class="usage-tag">BaseCriticActorAgent</span><span class="usage-tag">K9CriticActorAgent</span><span class="usage-tag">Contract drafting</span><span class="usage-tag">Report writing</span></div></div>
       <div class="card-footer"><a href="critic-actor-pattern.html" class="card-link" target="_blank" rel="noopener">View pattern &rarr;</a></div>
+    </div>
+
+    <div class="pattern-card" data-cat="routing">
+      <div class="card-top"><div class="card-icon">&#x21A3;</div><span class="card-category">Routing</span></div>
+      <div class="card-name">Event Router Pattern</div>
+      <div class="card-intent">Single entry point for all events — deterministic routing when intent is known, decoupled IntentOrchestrator when it is not, guaranteed response in all cases.</div>
+      <div class="card-usage"><div class="usage-label">Used in</div><div class="usage-tags"><span class="usage-tag">K9EventRouter</span><span class="usage-tag">IntentOrchestrator</span><span class="usage-tag">IntentSquad</span><span class="usage-tag">K9IntentAgent</span></div></div>
+      <div class="card-footer"><a href="event-router-pattern.html" class="card-link" target="_blank" rel="noopener">View pattern &rarr;</a></div>
     </div>
 
     <div class="pattern-card" data-cat="inference">

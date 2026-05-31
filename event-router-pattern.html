@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Factory Pattern &#8212; K9-AIF Patterns</title>
-  <meta name="description" content="Centralise component instantiation through static factories. Never instantiate agents, routers, orchestrators, or LLMs directly in application code.">
+  <title>Event Router Pattern &#8212; K9-AIF Patterns</title>
+  <meta name="description" content="Route incoming events to the correct domain orchestrator — deterministically when intent is known, or via a decoupled IntentOrchestrator when it is not.">
   <meta name="author" content="Ravi Natarajan">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,12 +21,8 @@
     }
     html{scroll-behavior:smooth;}
     body{background:var(--bg);color:var(--ink-2);font-family:'Inter',Arial,system-ui,sans-serif;font-size:15px;line-height:1.75;-webkit-font-smoothing:antialiased;}
-
-    /* Side overlay */
     .side-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:900;opacity:0;transition:opacity .3s ease;}
     .side-overlay.active{display:block;opacity:1;}
-
-    /* Side panel */
     .side-panel{position:fixed;top:0;left:0;width:260px;height:100vh;background:#070f18;border-right:1px solid rgba(0,230,255,0.15);z-index:1000;transform:translateX(-100%);transition:transform .3s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow-y:auto;}
     .side-panel.open{transform:translateX(0);}
     .side-panel-header{display:flex;align-items:center;justify-content:space-between;padding:16px 18px 14px;border-bottom:1px solid rgba(0,230,255,0.10);}
@@ -40,8 +36,6 @@
     .side-link{display:block;padding:9px 18px 9px 24px;color:#8aa0ae;font-size:13px;border-left:2px solid transparent;transition:color .18s,background .18s,border-color .18s;}
     .side-link:hover{color:#00E6FF;background:rgba(0,230,255,0.04);border-left-color:rgba(0,230,255,0.3);}
     .side-link.active{color:#00E6FF;border-left-color:#00E6FF;}
-
-    /* Nav */
     .site-nav{background:#0f1720;border-bottom:1px solid rgba(0,230,255,0.08);}
     .nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 32px;flex-wrap:wrap;}
     .nav-left{display:flex;align-items:center;gap:0;}
@@ -55,16 +49,11 @@
     .nav-links a{display:inline-block;padding:13px 22px;color:#6f8a96;text-decoration:none;font-size:0.88rem;border-left:1px solid rgba(0,230,255,0.08);transition:color .2s,background .2s;}
     .nav-links a:last-child{border-right:1px solid rgba(0,230,255,0.08);}
     .nav-links a:hover{color:#00E6FF;background:rgba(0,230,255,0.05);}
-
-    /* Page */
     .page{max-width:1100px;margin:0 auto;padding:0 32px;}
-
-    /* Article */
     .article-header{max-width:760px;padding:60px 0 44px;border-bottom:1px solid var(--border);margin-bottom:44px;}
     .article-kicker{font-size:0.68rem;font-weight:600;letter-spacing:0.24em;text-transform:uppercase;color:var(--blue);margin-bottom:18px;}
     .article-title{font-size:clamp(24px,3.5vw,38px);font-weight:800;color:var(--ink);letter-spacing:-0.4px;line-height:1.15;margin-bottom:14px;}
     .article-intent{font-size:1rem;color:var(--ink-3);max-width:680px;line-height:1.7;}
-
     .article-body{max-width:760px;}
     .article-body h2{font-size:1.1rem;font-weight:700;color:var(--ink);margin:36px 0 12px;letter-spacing:-0.2px;}
     .article-body p{color:var(--ink-3);margin-bottom:14px;line-height:1.75;}
@@ -72,26 +61,16 @@
     .article-body ul li{padding:6px 0 6px 20px;position:relative;color:var(--ink-3);font-size:14px;border-bottom:1px solid var(--border-l);}
     .article-body ul li::before{content:"→";position:absolute;left:0;color:var(--blue);}
     .article-body ul li:last-child{border-bottom:none;}
-
-    /* Image */
     .pattern-image{margin:28px 0;border:1px solid var(--border);border-radius:10px;overflow:hidden;background:var(--bg-card);}
     .pattern-image img{width:100%;display:block;}
     .pattern-image figcaption{padding:8px 14px;font-size:12px;color:var(--muted);border-top:1px solid var(--border-l);font-style:italic;}
-
-    /* Tags */
     .usage-tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px;}
     .usage-tag{font-size:0.76rem;font-weight:500;color:var(--code-fg);background:var(--code-bg);border:1px solid rgba(28,105,212,0.14);border-radius:5px;padding:3px 9px;font-family:'Courier New',monospace;}
-
-    /* GitHub link */
     .github-link{display:inline-flex;align-items:center;gap:8px;margin-top:32px;padding:12px 20px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;color:var(--ink-2);font-size:13px;font-weight:600;transition:border-color .2s,box-shadow .2s;}
     .github-link:hover{border-color:#c8c0b4;box-shadow:0 2px 10px rgba(0,0,0,0.06);}
-
-    /* Back link */
     .back-link{display:inline-block;margin:0 0 32px;font-size:13px;font-weight:600;color:var(--blue);}
     .back-link:hover{text-decoration:underline;}
     .bottom-back{margin:48px 0 0;padding-top:32px;border-top:1px solid var(--border);}
-
-    /* Footer */
     footer{background:#0f1720;border-top:1px solid rgba(0,230,255,0.08);padding:40px 32px;margin-top:64px;}
     .footer-inner{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;}
     .footer-brand{font-weight:700;color:#e8edf0;font-size:0.95rem;}
@@ -100,9 +79,8 @@
     .footer-links a{font-size:0.82rem;color:#6f8a96;text-decoration:none;transition:color .2s;}
     .footer-links a:hover{color:#00E6FF;}
     .footer-copy{max-width:1100px;margin:16px auto 0;padding-top:14px;border-top:1px solid rgba(0,230,255,0.08);font-size:0.72rem;color:#4d6270;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
-
     @media(max-width:700px){.page{padding:0 20px;}.nav-inner{padding:0 16px;}.nav-links a{padding:13px 14px;font-size:0.8rem;}footer{padding:32px 20px;}.article-header{padding:40px 0 32px;}}
-</style>
+  </style>
 </head>
 <body>
 
@@ -116,14 +94,14 @@
 <li><a href="validation-loop-pattern.html" class="side-link">Validation Loop Pattern</a></li>
 <li><a href="critic-actor-pattern.html" class="side-link">Critic-Actor Pattern</a></li>
 <li><span class="side-cat">ROUTING</span></li>
-<li><a href="event-router-pattern.html" class="side-link">Event Router Pattern</a></li>
+<li><a href="event-router-pattern.html" class="side-link active">Event Router Pattern</a></li>
 <li><span class="side-cat">INFERENCE</span></li>
 <li><a href="model-router-pattern.html" class="side-link">Model Router Pattern</a></li>
 <li><a href="inference-pattern.html" class="side-link">Inference Layer Pattern</a></li>
 <li><a href="provider-adapter-pattern.html" class="side-link">Provider Adapter Pattern</a></li>
 <li><a href="llm-invoke-pattern.html" class="side-link">LLM Invoke Chain Pattern</a></li>
 <li><span class="side-cat">GOVERNANCE</span></li>
-<li><a href="factory-pattern.html" class="side-link active">Factory Pattern</a></li>
+<li><a href="factory-pattern.html" class="side-link">Factory Pattern</a></li>
 <li><a href="runtime-agent-loader-pattern.html" class="side-link">Runtime Agent Loader Pattern</a></li>
 <li><span class="side-cat">INTEGRATION</span></li>
 <li><a href="external-connector-pattern.html" class="side-link">External Connector Pattern</a></li>
@@ -148,9 +126,9 @@
 <div class="page">
 
   <header class="article-header">
-    <div class="article-kicker">Governance Pattern</div>
-    <h1 class="article-title">Factory Pattern</h1>
-    <p class="article-intent">Centralise component instantiation through static factories. Never instantiate agents, routers, orchestrators, or LLMs directly in application code.</p>
+    <div class="article-kicker">Routing Pattern</div>
+    <h1 class="article-title">Event Router Pattern</h1>
+    <p class="article-intent">Route incoming events to the correct domain orchestrator — deterministically when intent is known, or via a decoupled IntentOrchestrator when it is not — with a guaranteed response in all cases.</p>
   </header>
 
   <div class="article-body">
@@ -158,50 +136,54 @@
     <a href="index.html" class="back-link">&#x2190; All Patterns</a>
 
     <figure class="pattern-image">
-      <img src="factory-pattern/factory_class_diagram.png" alt="Factory Pattern diagram" loading="lazy">
-      <figcaption>Factory Pattern — structural diagram</figcaption>
+      <img src="event-router-pattern/k9-aif-routing-model.png" alt="Event Router Pattern diagram" loading="lazy">
+      <figcaption>Event Router Pattern — topology diagram showing the three routing outcomes</figcaption>
     </figure>
 
     <h2>Motivation</h2>
-    <p>Direct instantiation scatters construction logic, prevents governance, and couples application code to concrete implementations. When construction requires config, caching, thread-safety, and lifecycle management, doing it inline becomes unmanageable.</p><p>K9-AIF factories are static — they cannot be instantiated. They maintain a thread-safe registry and return cached instances. All major components are provisioned exclusively through factories.</p>
+    <p>Enterprise AI systems receive events from many sources: structured UI selections, API calls, document uploads, free-text messages. Some carry a clear signal — the user selected "Report a Claim." Others are ambiguous — the user typed "I need help with something."</p>
+    <p>The naive approach embeds classification logic inside the router. This couples routing and classification, and when the classification strategy changes (rules → LLM → NLP), the router changes too. The Event Router Pattern solves this by making the Router the single, dumb entry point and delegating classification to a separate, Kafka-decoupled <code>IntentOrchestrator</code>.</p>
 
-    <h2>Structure</h2>
+    <h2>Three Routing Outcomes</h2>
     <ul>
-      <li>Static factory class with _registry: Dict[str, Type]</li>
-<li>bootstrap(config) — initialises the factory once per runtime</li>
-<li>register(name, cls) — adds a class to the registry</li>
-<li>get(name) — returns a cached instance, raises if unknown</li>
-<li>create(config) — config-driven selection, zero-config default</li>
-<li>Thread-safe via threading.Lock</li>
+      <li><strong>Deterministic</strong> — event_type is in the routing table. Router publishes directly to the domain topic. No LLM, zero latency.</li>
+      <li><strong>Non-deterministic, resolved</strong> — event_type unknown. Router publishes to intent.in. IntentOrchestrator classifies and re-publishes to the domain topic.</li>
+      <li><strong>Clarification required</strong> — intent cannot be determined with sufficient confidence. IntentOrchestrator publishes a "please clarify" response. Nothing is silently dropped.</li>
+    </ul>
+
+    <h2>Key Principle</h2>
+    <p>The Router is always the single entry point. The <code>IntentOrchestrator</code> is a Kafka-decoupled process — it consumes <code>intent.in</code> independently. The Router does not know it exists. This follows the same topology used throughout K9-AIF: Router publishes, Orchestrators consume.</p>
+
+    <h2>EIP Lineage</h2>
+    <ul>
+      <li><strong>Content-Based Router</strong> (Hohpe &amp; Woolf) — IntentOrchestrator classifies and re-routes based on message content</li>
+      <li><strong>Message Channel</strong> — intent.in and responses.out are typed Kafka channels</li>
+      <li><strong>Pipes and Filters</strong> — Router → intent.in → IntentOrchestrator → domain topic</li>
     </ul>
 
     <h2>Key Concepts</h2>
     <div class="usage-tags">
-      <span class="usage-tag">AgentRegistry</span>
-<span class="usage-tag">OrchestratorRegistry</span>
-<span class="usage-tag">RouterFactory</span>
-<span class="usage-tag">LLMFactory</span>
-<span class="usage-tag">ModelRouterFactory</span>
-<span class="usage-tag">SecretManagerFactory</span>
-<span class="usage-tag">CacheFactory</span>
-<span class="usage-tag">singleton caching</span>
-<span class="usage-tag">bootstrap pattern</span>
+      <span class="usage-tag">K9EventRouter</span>
+      <span class="usage-tag">IntentOrchestrator</span>
+      <span class="usage-tag">IntentSquad</span>
+      <span class="usage-tag">K9IntentAgent</span>
+      <span class="usage-tag">BaseIntentAgent</span>
+      <span class="usage-tag">intent.in</span>
+      <span class="usage-tag">responses.out</span>
+      <span class="usage-tag">routing.table</span>
+      <span class="usage-tag">confidence_threshold</span>
     </div>
 
     <h2>Used in K9-AIF</h2>
     <div class="usage-tags">
-      <span class="usage-tag">AgentRegistry</span>
-<span class="usage-tag">OrchestratorRegistry</span>
-<span class="usage-tag">RouterFactory</span>
-<span class="usage-tag">LLMFactory</span>
-<span class="usage-tag">ModelRouterFactory</span>
-<span class="usage-tag">SecretManagerFactory</span>
-<span class="usage-tag">CacheFactory</span>
-<span class="usage-tag">PersistenceFactory</span>
+      <span class="usage-tag">K9EventRouter (OOB)</span>
+      <span class="usage-tag">IntentOrchestrator (OOB)</span>
+      <span class="usage-tag">examples/k9routing/</span>
+      <span class="usage-tag">k9-aif &gt;= 1.2.0</span>
     </div>
 
     <div class="bottom-back">
-      <a href="https://github.com/k9aif/k9aif-patterns/tree/main/k9aif-patterns/factory-pattern" class="github-link" target="_blank" rel="noopener">
+      <a href="https://github.com/k9aif/k9aif-patterns/tree/main/k9aif-patterns/event-router-pattern" class="github-link" target="_blank" rel="noopener">
         View implementation on GitHub &#x2197;
       </a>
     </div>
@@ -227,7 +209,6 @@
 </footer>
 
 <script>
-
   var hamburger=document.getElementById('hamburger');
   var sidePanel=document.getElementById('side-panel');
   var sideClose=document.getElementById('side-close');
@@ -239,7 +220,6 @@
   if(overlay)overlay.addEventListener('click',close);
   document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
   document.querySelectorAll('a[href^="#"]').forEach(function(a){a.addEventListener('click',function(e){var t=document.querySelector(this.getAttribute('href'));if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth'});close();}});});
-
 </script>
 </body>
 </html>
