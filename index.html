@@ -91,6 +91,22 @@
     .footer-links a:hover{color:#00E6FF;}
     .footer-copy{max-width:1200px;margin:20px auto 0;padding-top:16px;border-top:1px solid rgba(0,230,255,0.08);font-size:0.72rem;color:#4d6270;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
 
+    /* EIP section */
+    .eip-section{margin-top:64px;padding-top:48px;border-top:1px solid var(--border);padding-bottom:64px;}
+    .eip-kicker{font-size:0.68rem;font-weight:600;letter-spacing:0.24em;text-transform:uppercase;color:var(--blue);margin-bottom:14px;}
+    .eip-title{font-size:1.25rem;font-weight:800;color:var(--ink);margin-bottom:12px;letter-spacing:-0.3px;}
+    .eip-desc{font-size:0.88rem;color:var(--ink-3);max-width:680px;line-height:1.7;margin-bottom:28px;}
+    .eip-table-wrap{overflow-x:auto;}
+    .eip-table{width:100%;border-collapse:collapse;font-size:0.82rem;}
+    .eip-table thead tr{background:var(--bg-tint);border-bottom:2px solid var(--border);}
+    .eip-table th{text-align:left;padding:10px 14px;font-size:0.68rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);}
+    .eip-table td{padding:10px 14px;border-bottom:1px solid var(--border-l);color:var(--ink-3);vertical-align:top;line-height:1.5;}
+    .eip-table td:first-child{font-weight:600;color:var(--ink-2);white-space:nowrap;}
+    .eip-table td:nth-child(2){color:var(--blue);font-weight:500;}
+    .eip-table tr:last-child td{border-bottom:none;}
+    .eip-table tr:hover td{background:var(--bg-tint);}
+    .eip-ref{margin-top:20px;font-size:0.78rem;color:var(--muted);font-style:italic;}
+
     @media(max-width:900px){.sidebar{display:none;}.layout{padding:0 20px;}.catalog{grid-template-columns:1fr;}}
     @media(max-width:580px){footer{padding:32px 20px;}.nav-inner{padding:0 20px;}}
   </style>
@@ -259,6 +275,41 @@
       </div>
 
     </div>
+
+    <!-- EIP Lineage -->
+    <div class="eip-section">
+      <div class="eip-header">
+        <div class="eip-kicker">Theoretical Lineage</div>
+        <h2 class="eip-title">Enterprise Integration Patterns Mapping</h2>
+        <p class="eip-desc">These patterns are not new. They are established Enterprise Integration Patterns (Hohpe &amp; Woolf, 2003) applied to agentic AI — with formal ABB contracts, structural governance, and lifecycle guarantees added. K9-AIF did not invent the concepts. It brought the discipline.</p>
+      </div>
+      <div class="eip-table-wrap">
+        <table class="eip-table">
+          <thead>
+            <tr><th>EIP Pattern</th><th>K9-AIF Equivalent</th><th>What K9-AIF adds</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Pipes and Filters</td><td>Agent Squad — sequential flow</td><td>Shared context enrichment, governance per step</td></tr>
+            <tr><td>Scatter-Gather</td><td>Sub-Agent Pattern — K9AgentSpawner</td><td>No-orphan guarantee, deadlock prevention, bounded concurrency</td></tr>
+            <tr><td>Aggregator</td><td>merge_results() in K9AgentSpawner</td><td>SBB-controlled result policy, partial failure handling</td></tr>
+            <tr><td>Splitter</td><td>K9AgentSpawner splitting work to ChildAgents</td><td>Typed ChildAgent contract, lifecycle registry</td></tr>
+            <tr><td>Content-Based Router</td><td>K9EventRouter</td><td>Single entry point, intent fallback, governance boundary</td></tr>
+            <tr><td>Content Enricher</td><td>Context enrichment — each agent enriches shared context</td><td>Progressive enrichment contract across the Squad flow</td></tr>
+            <tr><td>Process Manager</td><td>Orchestrator</td><td>Squad coordination, governance enforcement, Zero Trust layer</td></tr>
+            <tr><td>Publish-Subscribe Channel</td><td>Kafka topics per domain</td><td>Router owns publish; Orchestrator owns consume — strict ownership</td></tr>
+            <tr><td>Transactional Client</td><td>K9TransactionAgent — 2-Phase Commit</td><td>Formal PREPARE/COMMIT/ROLLBACK over ChildAgents</td></tr>
+            <tr><td>Wire Tap</td><td>Governance pipeline intercept</td><td>Pre/post hooks on every agent, enforced in production</td></tr>
+            <tr><td>Canonical Data Model</td><td>K9-AIF shared context payload</td><td>Typed payload contract flowing Router → Squad → Agent</td></tr>
+            <tr><td>Correlation Identifier</td><td>session_id + transaction_id in payload</td><td>Session ABB with Redis-backed store, TTL, enable/disable flag</td></tr>
+            <tr><td>Message Store</td><td>K9Session — session_context persistence</td><td>Provider-agnostic store (Redis / SQLite / InMemory), auto-wired from config</td></tr>
+            <tr><td>Dead Letter Channel</td><td><em>Planned</em></td><td>&mdash;</td></tr>
+            <tr><td>Idempotent Receiver</td><td><em>Planned</em></td><td>&mdash;</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="eip-ref">Reference: Hohpe, G. &amp; Woolf, B. — <em>Enterprise Integration Patterns</em> (Addison-Wesley, 2003)</p>
+    </div>
+
   </div><!-- /main -->
 </div><!-- /layout -->
 
