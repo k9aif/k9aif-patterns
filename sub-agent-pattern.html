@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Inference Layer Pattern &#8212; K9-AIF Patterns</title>
-  <meta name="description" content="Build a provider-independent inference layer by separating ABB contracts from SBB implementations — swap Ollama, IBM Watsonx, or OpenAI via config with no code changes.">
+  <title>Sub-Agent Pattern &#8212; K9-AIF Patterns</title>
+  <meta name="description" content="Enable a parent agent (K9AgentSpawner) to spawn lightweight ChildAgents that execute concurrently and independently, then merge their results — applying the multithreading model to enterprise agentic AI.">
   <meta name="author" content="Ravi Natarajan">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -115,10 +115,10 @@
 <li><a href="agent-squad-pattern.html" class="side-link">Agent Squad Pattern</a></li>
 <li><a href="validation-loop-pattern.html" class="side-link">Validation Loop Pattern</a></li>
 <li><a href="critic-actor-pattern.html" class="side-link">Critic-Actor Pattern</a></li>
-<li><a href="sub-agent-pattern.html" class="side-link">Sub-Agent Pattern</a></li>
+<li><a href="sub-agent-pattern.html" class="side-link active">Sub-Agent Pattern</a></li>
 <li><span class="side-cat">INFERENCE</span></li>
 <li><a href="model-router-pattern.html" class="side-link">Model Router Pattern</a></li>
-<li><a href="inference-pattern.html" class="side-link active">Inference Layer Pattern</a></li>
+<li><a href="inference-pattern.html" class="side-link">Inference Layer Pattern</a></li>
 <li><a href="provider-adapter-pattern.html" class="side-link">Provider Adapter Pattern</a></li>
 <li><a href="llm-invoke-pattern.html" class="side-link">LLM Invoke Chain Pattern</a></li>
 <li><span class="side-cat">GOVERNANCE</span></li>
@@ -147,56 +147,56 @@
 <div class="page">
 
   <header class="article-header">
-    <div class="article-kicker">Inference Pattern</div>
-    <h1 class="article-title">Inference Layer Pattern</h1>
-    <p class="article-intent">Build a provider-independent inference layer by separating ABB contracts from SBB implementations — swap Ollama, IBM Watsonx, or OpenAI via config with no code changes.</p>
+    <div class="article-kicker">Execution Pattern</div>
+    <h1 class="article-title">Sub-Agent Pattern</h1>
+    <p class="article-intent">Enable a parent agent (K9AgentSpawner) to spawn lightweight ChildAgents that execute concurrently and independently, then merge their results — applying the multithreading model to enterprise agentic AI.</p>
   </header>
 
   <div class="article-body">
 
     <a href="index.html" class="back-link">&#x2190; All Patterns</a>
 
-    <figure class="pattern-image">
-      <img src="inference-pattern/inference_layer_small.png" alt="Inference Layer Pattern diagram" loading="lazy">
-      <figcaption>Inference Layer Pattern — structural diagram</figcaption>
-    </figure>
+    
 
     <h2>Motivation</h2>
-    <p>Agents that import LLM clients directly become provider-locked. Switching from Ollama to Watsonx requires modifying every agent. The inference layer pattern ensures the framework controls which provider is used, not the agent.</p><p>ABB contracts define what the inference layer must provide. SBB implementations deliver it for each provider. The factory resolves the right implementation from config at runtime.</p>
+    <p>The K9-AIF Squad executes agents sequentially — the right model for dependent steps. But many workflows contain independent work units that do not need to wait on each other: generating 20 scaffold files, extracting independent data slices, validating a transaction across multiple systems simultaneously.</p><p>Sequential execution in these cases is pure waste. The Sub-Agent Pattern introduces K9AgentSpawner — a parent agent that spawns lightweight ChildAgents in parallel, sequential, or tree mode, then merges their results. The Squad sees one agent. The spawning is entirely encapsulated.</p>
 
     <h2>Structure</h2>
     <ul>
-      <li>BaseLLM ABB defines the inference contract</li>
-<li>OllamaLLM, WatsonxLLM, MockLLM are SBB implementations</li>
-<li>ProviderAdapterRegistry maps provider name to adapter class</li>
-<li>LLMFactory.bootstrap(config) initialises the correct provider</li>
-<li>LLMFactory.get(alias) returns a cached instance</li>
-<li>Agents call llm_invoke() — never touch LLMFactory directly</li>
+      <li>K9AgentSpawner sits in the Squad flow like any other agent</li>
+<li>When executed, it dynamically spawns ChildAgents at runtime</li>
+<li>ChildAgents are leaf nodes — they cannot spawn further agents</li>
+<li>Three execution modes: parallel (fork-join), sequential (pipeline), tree (hierarchical)</li>
+<li>ChildRegistry tracks all spawned children — no orphans on parent failure</li>
+<li>merge_results() is overridable — SBB defines the result policy</li>
     </ul>
 
     <h2>Key Concepts</h2>
     <div class="usage-tags">
-      <span class="usage-tag">BaseLLM</span>
-<span class="usage-tag">LLMFactory</span>
-<span class="usage-tag">OllamaLLM</span>
-<span class="usage-tag">InferenceRequest</span>
-<span class="usage-tag">InferenceResponse</span>
-<span class="usage-tag">ProviderAdapterRegistry</span>
-<span class="usage-tag">MockLLM</span>
+      <span class="usage-tag">K9AgentSpawner</span>
+<span class="usage-tag">ChildAgent</span>
+<span class="usage-tag">ChildRegistry</span>
+<span class="usage-tag">K9TransactionAgent</span>
+<span class="usage-tag">K9Newfoundland</span>
+<span class="usage-tag">spawn_parallel</span>
+<span class="usage-tag">spawn_sequential</span>
+<span class="usage-tag">merge_results</span>
+<span class="usage-tag">2-Phase Commit</span>
+<span class="usage-tag">No-orphan guarantee</span>
     </div>
 
     <h2>Used in K9-AIF</h2>
     <div class="usage-tags">
-      <span class="usage-tag">LLMFactory</span>
-<span class="usage-tag">OllamaLLM</span>
-<span class="usage-tag">InferenceRequest</span>
-<span class="usage-tag">InferenceResponse</span>
-<span class="usage-tag">ProviderAdapterRegistry</span>
-<span class="usage-tag">MockLLM (testing)</span>
+      <span class="usage-tag">K9AgentSpawner</span>
+<span class="usage-tag">ChildAgent</span>
+<span class="usage-tag">K9TransactionAgent</span>
+<span class="usage-tag">K9Newfoundland</span>
+<span class="usage-tag">K9X StudioX — ScaffoldGenerationSquad</span>
+<span class="usage-tag">K9X StudioX — SpecParserAgent</span>
     </div>
 
     <div class="bottom-back">
-      <a href="https://github.com/k9aif/k9aif-patterns/tree/main/k9aif-patterns/inference-pattern" class="github-link" target="_blank" rel="noopener">
+      <a href="https://github.com/k9aif/k9aif-patterns/tree/main/k9aif-patterns/sub-agent-pattern" class="github-link" target="_blank" rel="noopener">
         View implementation on GitHub &#x2197;
       </a>
     </div>

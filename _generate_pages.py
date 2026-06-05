@@ -22,6 +22,7 @@ PATTERNS = [
     {"id": "factory-pattern",               "cat": "Governance",             "cat_slug": "governance"},
     {"id": "runtime-agent-loader-pattern",  "cat": "Governance",             "cat_slug": "governance"},
     {"id": "external-connector-pattern",    "cat": "Integration",            "cat_slug": "integration"},
+    {"id": "sub-agent-pattern",              "cat": "Execution",              "cat_slug": "execution"},
 ]
 
 PATTERN_DATA = {
@@ -213,6 +214,25 @@ The connector layer enforces policy at the boundary, abstracts the protocol, and
         "used_in": ["MCPHttpConnector", "MCPStdioConnector", "BaseMCPAgent", "MCPClientAgent", "DocumentExtractorAgent (EOC)", "Docling OCR MCP server"],
         "github": "external-connector-pattern",
     },
+    "sub-agent-pattern": {
+        "title": "Sub-Agent Pattern",
+        "intent": "Enable a parent agent (K9AgentSpawner) to spawn lightweight ChildAgents that execute concurrently and independently, then merge their results — applying the multithreading model to enterprise agentic AI.",
+        "image": None,
+        "motivation": """The K9-AIF Squad executes agents sequentially — the right model for dependent steps. But many workflows contain independent work units that do not need to wait on each other: generating 20 scaffold files, extracting independent data slices, validating a transaction across multiple systems simultaneously.
+
+Sequential execution in these cases is pure waste. The Sub-Agent Pattern introduces K9AgentSpawner — a parent agent that spawns lightweight ChildAgents in parallel, sequential, or tree mode, then merges their results. The Squad sees one agent. The spawning is entirely encapsulated.""",
+        "structure": [
+            "K9AgentSpawner sits in the Squad flow like any other agent",
+            "When executed, it dynamically spawns ChildAgents at runtime",
+            "ChildAgents are leaf nodes — they cannot spawn further agents",
+            "Three execution modes: parallel (fork-join), sequential (pipeline), tree (hierarchical)",
+            "ChildRegistry tracks all spawned children — no orphans on parent failure",
+            "merge_results() is overridable — SBB defines the result policy",
+        ],
+        "key_concepts": ["K9AgentSpawner", "ChildAgent", "ChildRegistry", "K9TransactionAgent", "K9Newfoundland", "spawn_parallel", "spawn_sequential", "merge_results", "2-Phase Commit", "No-orphan guarantee"],
+        "used_in": ["K9AgentSpawner", "ChildAgent", "K9TransactionAgent", "K9Newfoundland", "K9X StudioX — ScaffoldGenerationSquad", "K9X StudioX — SpecParserAgent"],
+        "github": "sub-agent-pattern",
+    },
 }
 
 CSS = """
@@ -325,7 +345,7 @@ JS = """
 """
 
 SIDE_PANEL_CATS = [
-    ("EXECUTION", ["agent-squad-pattern", "validation-loop-pattern", "critic-actor-pattern"]),
+    ("EXECUTION", ["agent-squad-pattern", "validation-loop-pattern", "critic-actor-pattern", "sub-agent-pattern"]),
     ("INFERENCE", ["model-router-pattern", "inference-pattern", "provider-adapter-pattern", "llm-invoke-pattern"]),
     ("GOVERNANCE", ["factory-pattern", "runtime-agent-loader-pattern"]),
     ("INTEGRATION", ["external-connector-pattern"]),
