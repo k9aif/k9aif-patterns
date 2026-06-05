@@ -18,13 +18,14 @@
       --blue:#1C69D4;--blue-bg:rgba(28,105,212,0.06);
       --gold:#7a5c1e;--gold-bg:rgba(122,92,30,0.07);
       --code-fg:#1C69D4;--code-bg:rgba(28,105,212,0.06);
+      --nav-h:49px;
     }
     html{scroll-behavior:smooth;}
     body{background:var(--bg);color:var(--ink-2);font-family:'Inter',Arial,system-ui,sans-serif;font-weight:400;font-size:15px;line-height:1.75;-webkit-font-smoothing:antialiased;}
 
-    /* Nav — exact boxer style */
+    /* Nav */
     .site-nav{background:#0f1720;border-bottom:1px solid rgba(0,230,255,0.08);}
-    .nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 32px;flex-wrap:wrap;}
+    .nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 32px;flex-wrap:wrap;}
     .nav-brand{font-size:1rem;font-weight:700;color:#e8edf0;text-decoration:none;letter-spacing:0.04em;padding:14px 0;}
     .nav-brand span{color:#00E6FF;}
     .nav-links{display:flex;}
@@ -32,54 +33,66 @@
     .nav-links a:last-child{border-right:1px solid rgba(0,230,255,0.08);}
     .nav-links a:hover{color:#00E6FF;background:rgba(0,230,255,0.05);}
 
-    /* Page wrapper */
-    .page{max-width:1100px;margin:0 auto;padding:0 32px;}
+    /* Outer layout: sidebar + main */
+    .layout{max-width:1200px;margin:0 auto;padding:0 32px;display:flex;gap:36px;align-items:flex-start;}
+
+    /* Left sidebar */
+    .sidebar{width:200px;flex-shrink:0;position:sticky;top:24px;padding:28px 0 64px;}
+    .sidebar-cat{font-size:0.62rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin:18px 0 6px;padding-left:2px;}
+    .sidebar-cat:first-child{margin-top:0;}
+    .sidebar-link{display:block;font-size:0.8rem;color:var(--ink-3);text-decoration:none;padding:3px 0 3px 10px;border-left:2px solid transparent;line-height:1.4;transition:color .15s,border-color .15s;}
+    .sidebar-link:hover{color:var(--blue);border-left-color:rgba(28,105,212,0.35);}
+    .sidebar-link.active{color:var(--blue);border-left-color:var(--blue);font-weight:600;}
+
+    /* Main content */
+    .main{flex:1;min-width:0;}
 
     /* Article header */
-    .article-header{max-width:760px;padding:64px 0 48px;border-bottom:1px solid var(--border);margin-bottom:40px;}
+    .article-header{padding:48px 0 40px;border-bottom:1px solid var(--border);margin-bottom:32px;}
     .article-kicker{font-size:0.68rem;font-weight:600;letter-spacing:0.24em;text-transform:uppercase;color:var(--blue);margin-bottom:20px;}
-    .article-title{font-size:clamp(26px,4vw,40px);font-weight:800;color:var(--ink);letter-spacing:-0.5px;line-height:1.15;margin-bottom:16px;}
-    .article-desc{font-size:1rem;color:var(--ink-3);max-width:720px;line-height:1.7;margin-bottom:20px;}
-    .article-meta{display:flex;gap:12px;flex-wrap:wrap;}
-    .meta-tag{font-size:0.72rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);background:var(--bg-tint);border:1px solid var(--border);border-radius:4px;padding:3px 10px;}
+    .article-title{font-size:clamp(24px,3.5vw,38px);font-weight:800;color:var(--ink);letter-spacing:-0.5px;line-height:1.15;margin-bottom:14px;}
+    .article-desc{font-size:0.95rem;color:var(--ink-3);max-width:640px;line-height:1.7;margin-bottom:18px;}
+    .article-meta{display:flex;gap:10px;flex-wrap:wrap;}
+    .meta-tag{font-size:0.7rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);background:var(--bg-tint);border:1px solid var(--border);border-radius:4px;padding:3px 10px;}
 
     /* Filter bar */
-    .filter-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px;}
-    .filter-btn{font-size:0.75rem;font-weight:600;padding:5px 16px;border:1px solid var(--border);border-radius:20px;color:var(--muted);background:none;cursor:pointer;transition:all .18s;font-family:'Inter',sans-serif;}
+    .filter-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;}
+    .filter-btn{font-size:0.73rem;font-weight:600;padding:4px 14px;border:1px solid var(--border);border-radius:20px;color:var(--muted);background:none;cursor:pointer;transition:all .18s;font-family:'Inter',sans-serif;}
     .filter-btn:hover,.filter-btn.active{color:var(--blue);border-color:rgba(28,105,212,0.35);background:var(--blue-bg);}
 
     /* Catalog grid */
-    .catalog{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;padding-bottom:64px;}
+    .catalog{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;padding-bottom:64px;}
 
     /* Pattern card */
-    .pattern-card{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:22px 20px 18px;display:flex;flex-direction:column;gap:10px;transition:border-color .2s,box-shadow .2s;}
+    .pattern-card{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:20px 18px 16px;display:flex;flex-direction:column;gap:10px;transition:border-color .2s,box-shadow .2s;scroll-margin-top:32px;}
     .pattern-card:hover{border-color:#c8c0b4;box-shadow:0 2px 14px rgba(0,0,0,0.06);}
+    .pattern-card.highlight{border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-bg);}
     .card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;}
-    .card-icon{font-size:18px;color:var(--ink-3);flex-shrink:0;}
-    .card-category{font-size:0.62rem;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);text-align:right;line-height:1.3;}
-    .card-name{font-size:0.95rem;font-weight:700;color:var(--ink);line-height:1.3;}
-    .card-intent{font-size:0.82rem;color:var(--ink-3);line-height:1.55;}
-    .card-usage{border-top:1px solid var(--border-l);padding-top:10px;margin-top:4px;}
-    .usage-label{font-size:0.6rem;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
-    .usage-tags{display:flex;flex-wrap:wrap;gap:5px;}
-    .usage-tag{font-size:0.72rem;font-weight:500;color:var(--code-fg);background:var(--code-bg);border:1px solid rgba(28,105,212,0.12);border-radius:4px;padding:2px 7px;font-family:'Courier New',monospace;}
+    .card-icon{font-size:17px;color:var(--ink-3);flex-shrink:0;}
+    .card-category{font-size:0.6rem;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);text-align:right;line-height:1.3;}
+    .card-name{font-size:0.92rem;font-weight:700;color:var(--ink);line-height:1.3;}
+    .card-intent{font-size:0.8rem;color:var(--ink-3);line-height:1.55;}
+    .card-usage{border-top:1px solid var(--border-l);padding-top:8px;margin-top:2px;}
+    .usage-label{font-size:0.58rem;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);margin-bottom:5px;}
+    .usage-tags{display:flex;flex-wrap:wrap;gap:4px;}
+    .usage-tag{font-size:0.7rem;font-weight:500;color:var(--code-fg);background:var(--code-bg);border:1px solid rgba(28,105,212,0.12);border-radius:4px;padding:2px 6px;font-family:'Courier New',monospace;}
     .usage-tag--gold{color:var(--gold);background:var(--gold-bg);border-color:rgba(122,92,30,0.15);}
     .card-footer{margin-top:auto;}
-    .card-link{font-size:0.78rem;font-weight:600;color:var(--blue);}
+    .card-link{font-size:0.76rem;font-weight:600;color:var(--blue);}
     .card-link:hover{text-decoration:underline;}
 
-    /* Footer — exact boxer style */
+    /* Footer */
     footer{background:#0f1720;border-top:1px solid rgba(0,230,255,0.08);padding:40px 32px;}
-    .footer-inner{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;}
+    .footer-inner{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;}
     .footer-brand{font-weight:700;color:#e8edf0;font-size:0.95rem;}
     .footer-brand span{color:#00E6FF;}
     .footer-links{display:flex;gap:20px;flex-wrap:wrap;}
     .footer-links a{font-size:0.82rem;color:#6f8a96;text-decoration:none;transition:color .2s;}
     .footer-links a:hover{color:#00E6FF;}
-    .footer-copy{max-width:1100px;margin:20px auto 0;padding-top:16px;border-top:1px solid rgba(0,230,255,0.08);font-size:0.72rem;color:#4d6270;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+    .footer-copy{max-width:1200px;margin:20px auto 0;padding-top:16px;border-top:1px solid rgba(0,230,255,0.08);font-size:0.72rem;color:#4d6270;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
 
-    @media(max-width:900px){.catalog{grid-template-columns:repeat(2,1fr);}}
-    @media(max-width:580px){.catalog{grid-template-columns:1fr;}.page{padding:0 20px;}footer{padding:32px 20px;}.nav-inner{padding:0 20px;}}
+    @media(max-width:900px){.sidebar{display:none;}.layout{padding:0 20px;}.catalog{grid-template-columns:1fr;}}
+    @media(max-width:580px){footer{padding:32px 20px;}.nav-inner{padding:0 20px;}}
   </style>
 </head>
 <body>
@@ -97,120 +110,157 @@
   </div>
 </nav>
 
-<div class="page">
+<div class="layout">
 
-  <header class="article-header">
-    <div class="article-kicker">Architecture Patterns</div>
-    <h1 class="article-title">K9-AIF Pattern Catalog</h1>
-    <p class="article-desc">Reusable architectural patterns for building governed, enterprise-scale agentic AI systems. Framework-agnostic. Production-tested in K9-AIF.</p>
-    <div class="article-meta">
-      <span class="meta-tag">10 Patterns</span>
-      <span class="meta-tag">Apache 2.0</span>
-      <span class="meta-tag">GoF &middot; POSA &middot; TOGAF lineage</span>
-    </div>
-  </header>
+  <!-- Left sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-cat">Execution</div>
+    <a href="#agent-squad-pattern" class="sidebar-link">Agent Squad</a>
+    <a href="#validation-loop-pattern" class="sidebar-link">Validation Loop</a>
+    <a href="#critic-actor-pattern" class="sidebar-link">Critic-Actor</a>
+    <a href="#sub-agent-pattern" class="sidebar-link">Sub-Agent</a>
 
-  <div class="filter-bar">
-    <button class="filter-btn active" data-filter="all">All</button>
-    <button class="filter-btn" data-filter="execution">Execution</button>
-    <button class="filter-btn" data-filter="routing">Routing</button>
-    <button class="filter-btn" data-filter="inference">Inference</button>
-    <button class="filter-btn" data-filter="integration">Integration</button>
-    <button class="filter-btn" data-filter="governance">Governance</button>
-  </div>
+    <div class="sidebar-cat">Routing</div>
+    <a href="#event-router-pattern" class="sidebar-link">Event Router</a>
 
-  <div class="catalog">
+    <div class="sidebar-cat">Inference</div>
+    <a href="#model-router-pattern" class="sidebar-link">Model Router</a>
+    <a href="#inference-pattern" class="sidebar-link">Inference Layer</a>
+    <a href="#provider-adapter-pattern" class="sidebar-link">Provider Adapter</a>
+    <a href="#llm-invoke-pattern" class="sidebar-link">LLM Invoke</a>
 
-    <div class="pattern-card" data-cat="execution">
-      <div class="card-top"><div class="card-icon">&#x2B22;</div><span class="card-category">Execution</span></div>
-      <div class="card-name">Agent Squad Pattern</div>
-      <div class="card-intent">Organize multiple agents into a coordinated execution unit with shared context, sequential flow, and governance enforcement.</div>
-      <div class="card-usage"><div class="usage-label">Used in</div><div class="usage-tags"><span class="usage-tag">BaseSquad</span><span class="usage-tag">SquadLoader</span><span class="usage-tag">EOC domain squads</span><span class="usage-tag">DoW DoDAF stages</span></div></div>
-      <div class="card-footer"><a href="agent-squad-pattern.html" class="card-link" target="_blank" rel="noopener">View pattern &rarr;</a></div>
-    </div>
+    <div class="sidebar-cat">Governance</div>
+    <a href="#factory-pattern" class="sidebar-link">Factory</a>
+    <a href="#runtime-agent-loader-pattern" class="sidebar-link">Runtime Loader</a>
 
-    <div class="pattern-card" data-cat="execution">
-      <div class="card-top"><div class="card-icon">&#x27F3;</div><span class="card-category">Execution</span></div>
-      <div class="card-name">Validation Loop Pattern</div>
-      <div class="card-intent">Enable iterative hypothesis testing &mdash; validate, observe, and retry until confidence is sufficient or iteration cap is reached.</div>
-      <div class="card-usage"><div class="usage-label">Used in</div><div class="usage-tags"><span class="usage-tag">BaseValidationLoopAgent</span><span class="usage-tag">K9ValidationLoopAgent</span><span class="usage-tag">FraudDetectionAgent</span><span class="usage-tag">DocumentExtractorAgent</span></div></div>
-      <div class="card-footer"><a href="validation-loop-pattern.html" class="card-link" target="_blank" rel="noopener">View pattern &rarr;</a></div>
-    </div>
+    <div class="sidebar-cat">Integration</div>
+    <a href="#external-connector-pattern" class="sidebar-link">External Connector</a>
+  </aside>
 
-    <div class="pattern-card" data-cat="execution">
-      <div class="card-top"><div class="card-icon">&#x25C8;</div><span class="card-category">Execution</span></div>
-      <div class="card-name">Critic-Actor Pattern</div>
-      <div class="card-intent">An Actor produces a draft; a Critic evaluates it; the Actor refines &mdash; repeating until quality bar is met or escalation triggers.</div>
-      <div class="card-usage"><div class="usage-label">Used in</div><div class="usage-tags"><span class="usage-tag">BaseCriticActorAgent</span><span class="usage-tag">K9CriticActorAgent</span><span class="usage-tag">Contract drafting</span><span class="usage-tag">Report writing</span></div></div>
-      <div class="card-footer"><a href="critic-actor-pattern.html" class="card-link" target="_blank" rel="noopener">View pattern &rarr;</a></div>
-    </div>
+  <!-- Main content -->
+  <div class="main">
 
-    <div class="pattern-card" data-cat="execution">
-      <div class="card-top"><div class="card-icon">&#x29C9;</div><span class="card-category">Execution</span></div>
-      <div class="card-name">Sub-Agent Pattern</div>
-      <div class="card-intent">A parent agent (K9AgentSpawner) spawns lightweight ChildAgents that execute concurrently and independently, then merges their results &mdash; applying the multithreading model to enterprise agentic AI.</div>
-      <div class="card-usage"><div class="usage-label">Used in</div><div class="usage-tags"><span class="usage-tag">K9AgentSpawner</span><span class="usage-tag">ChildAgent</span><span class="usage-tag">K9TransactionAgent</span><span class="usage-tag">K9Newfoundland</span></div></div>
-      <div class="card-footer"><a href="sub-agent-pattern.html" class="card-link" target="_blank" rel="noopener">View pattern &rarr;</a></div>
+    <header class="article-header">
+      <div class="article-kicker">Architecture Patterns</div>
+      <h1 class="article-title">K9-AIF Pattern Catalog</h1>
+      <p class="article-desc">Reusable architectural patterns for building governed, enterprise-scale agentic AI systems. Framework-agnostic. Production-tested in K9-AIF.</p>
+      <div class="article-meta">
+        <span class="meta-tag">11 Patterns</span>
+        <span class="meta-tag">Apache 2.0</span>
+        <span class="meta-tag">GoF &middot; POSA &middot; TOGAF lineage</span>
+      </div>
+    </header>
+
+    <div class="filter-bar">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="execution">Execution</button>
+      <button class="filter-btn" data-filter="routing">Routing</button>
+      <button class="filter-btn" data-filter="inference">Inference</button>
+      <button class="filter-btn" data-filter="integration">Integration</button>
+      <button class="filter-btn" data-filter="governance">Governance</button>
     </div>
 
-    <div class="pattern-card" data-cat="routing">
-      <div class="card-top"><div class="card-icon">&#x21A3;</div><span class="card-category">Routing</span></div>
-      <div class="card-name">Event Router Pattern</div>
-      <div class="card-intent">Single entry point for all events — deterministic routing when intent is known, decoupled IntentOrchestrator when it is not, guaranteed response in all cases.</div>
-      <div class="card-usage"><div class="usage-label">Used in</div><div class="usage-tags"><span class="usage-tag">K9EventRouter</span><span class="usage-tag">IntentOrchestrator</span><span class="usage-tag">IntentSquad</span><span class="usage-tag">K9IntentAgent</span></div></div>
-      <div class="card-footer"><a href="event-router-pattern.html" class="card-link" target="_blank" rel="noopener">View pattern &rarr;</a></div>
-    </div>
+    <div class="catalog">
 
-    <div class="pattern-card" data-cat="inference">
-      <div class="card-top"><div class="card-icon">&#x2B21;</div><span class="card-category">Inference</span></div>
-      <div class="card-name">Model Router Pattern</div>
-      <div class="card-intent">Dynamically select the most appropriate model based on task type, cost, latency, and policy &mdash; fully decoupled from agent code.</div>
-      <div class="card-usage"><div class="usage-label">Used in</div><div class="usage-tags"><span class="usage-tag">BaseModelRouter</span><span class="usage-tag">K9ModelRouter</span><span class="usage-tag">ModelRouterFactory</span><span class="usage-tag">llm_invoke()</span></div></div>
-      <div class="card-footer"><a href="model-router-pattern.html" class="card-link" target="_blank" rel="noopener">View pattern &rarr;</a></div>
-    </div>
+      <div class="pattern-card" id="agent-squad-pattern" data-cat="execution">
+        <div class="card-top"><div class="card-icon">&#x2B22;</div><span class="card-category">Execution</span></div>
+        <div class="card-name">Agent Squad Pattern</div>
+        <div class="card-intent">Organize multiple agents into a coordinated execution unit with shared context, sequential flow, and governance enforcement.</div>
+        <div class="card-usage"><div class="usage-label">Used in</div><div class="usage-tags"><span class="usage-tag">BaseSquad</span><span class="usage-tag">SquadLoader</span><span class="usage-tag">EOC domain squads</span><span class="usage-tag">DoW DoDAF stages</span></div></div>
+        <div class="card-footer"><a href="agent-squad-pattern.html" class="card-link" target="_blank" rel="noopener">View pattern &rarr;</a></div>
+      </div>
 
-    <div class="pattern-card" data-cat="inference">
-      <div class="card-top"><div class="card-icon">&#x25CE;</div><span class="card-category">Inference</span></div>
-      <div class="card-name">Inference Layer Pattern</div>
-      <div class="card-intent">Provider-independent inference layer &mdash; ABB contracts separate from SBB implementations. Swap Ollama, Watsonx, or OpenAI via config.</div>
-      <div class="card-usage"><div class="usage-label">Used in</div><div class="usage-tags"><span class="usage-tag">LLMFactory</span><span class="usage-tag">OllamaLLM</span><span class="usage-tag">InferenceRequest</span><span class="usage-tag">ProviderAdapterRegistry</span></div></div>
-      <div class="card-footer"><a href="inference-pattern.html" class="card-link" target="_blank" rel="noopener">View pattern &rarr;</a></div>
-    </div>
+      <div class="pattern-card" id="validation-loop-pattern" data-cat="execution">
+        <div class="card-top"><div class="card-icon">&#x27F3;</div><span class="card-category">Execution</span></div>
+        <div class="card-name">Validation Loop Pattern</div>
+        <div class="card-intent">Enable iterative hypothesis testing &mdash; validate, observe, and retry until confidence is sufficient or iteration cap is reached.</div>
+        <div class="card-usage"><div class="usage-label">Used in</div><div class="usage-tags"><span class="usage-tag">BaseValidationLoopAgent</span><span class="usage-tag">K9ValidationLoopAgent</span><span class="usage-tag">FraudDetectionAgent</span><span class="usage-tag">DocumentExtractorAgent</span></div></div>
+        <div class="card-footer"><a href="validation-loop-pattern.html" class="card-link" target="_blank" rel="noopener">View pattern &rarr;</a></div>
+      </div>
 
-    <div class="pattern-card" data-cat="inference">
-      <div class="card-top"><div class="card-icon">&#x25CF;</div><span class="card-category">Inference &middot; Integration</span></div>
-      <div class="card-name">Provider Adapter Pattern</div>
-      <div class="card-intent">Support multiple pluggable backends without coupling factories or agents to any vendor &mdash; LLMs, secret managers, caches.</div>
-      <div class="card-usage"><div class="usage-label">Used in</div><div class="usage-tags"><span class="usage-tag">SecretManagerFactory</span><span class="usage-tag">CacheFactory</span><span class="usage-tag">K9XLiteLLMBridgeAdapter</span><span class="usage-tag usage-tag--gold">EnvSecretAdapter</span></div></div>
-      <div class="card-footer"><a href="provider-adapter-pattern.html" class="card-link" target="_blank" rel="noopener">View pattern &rarr;</a></div>
-    </div>
+      <div class="pattern-card" id="critic-actor-pattern" data-cat="execution">
+        <div class="card-top"><div class="card-icon">&#x25C8;</div><span class="card-category">Execution</span></div>
+        <div class="card-name">Critic-Actor Pattern</div>
+        <div class="card-intent">An Actor produces a draft; a Critic evaluates it; the Actor refines &mdash; repeating until quality bar is met or escalation triggers.</div>
+        <div class="card-usage"><div class="usage-label">Used in</div><div class="usage-tags"><span class="usage-tag">BaseCriticActorAgent</span><span class="usage-tag">K9CriticActorAgent</span><span class="usage-tag">Contract drafting</span><span class="usage-tag">Report writing</span></div></div>
+        <div class="card-footer"><a href="critic-actor-pattern.html" class="card-link" target="_blank" rel="noopener">View pattern &rarr;</a></div>
+      </div>
 
-    <div class="pattern-card" data-cat="governance">
-      <div class="card-top"><div class="card-icon">&#x25A0;</div><span class="card-category">Governance &middot; Execution</span></div>
-      <div class="card-name">Factory Pattern</div>
-      <div class="card-intent">Centralise component instantiation through static factories. Never instantiate agents, routers, or LLMs directly in application code.</div>
-      <div class="card-usage"><div class="usage-label">Used in</div><div class="usage-tags"><span class="usage-tag">AgentRegistry</span><span class="usage-tag">RouterFactory</span><span class="usage-tag">LLMFactory</span><span class="usage-tag">ModelRouterFactory</span></div></div>
-      <div class="card-footer"><a href="factory-pattern.html" class="card-link" target="_blank" rel="noopener">View pattern &rarr;</a></div>
-    </div>
+      <div class="pattern-card" id="sub-agent-pattern" data-cat="execution">
+        <div class="card-top"><div class="card-icon">&#x29C9;</div><span class="card-category">Execution</span></div>
+        <div class="card-name">Sub-Agent Pattern</div>
+        <div class="card-intent">A parent agent (K9AgentSpawner) spawns lightweight ChildAgents that execute concurrently and independently, then merges their results &mdash; applying the multithreading model to enterprise agentic AI.</div>
+        <div class="card-usage"><div class="usage-label">Used in</div><div class="usage-tags"><span class="usage-tag">K9AgentSpawner</span><span class="usage-tag">ChildAgent</span><span class="usage-tag">K9TransactionAgent</span><span class="usage-tag">K9Newfoundland</span></div></div>
+        <div class="card-footer"><a href="sub-agent-pattern.html" class="card-link" target="_blank" rel="noopener">View pattern &rarr;</a></div>
+      </div>
 
-    <div class="pattern-card" data-cat="governance">
-      <div class="card-top"><div class="card-icon">&#x221E;</div><span class="card-category">Governance &middot; Execution</span></div>
-      <div class="card-name">Runtime Agent Loader Pattern</div>
-      <div class="card-intent">Load and wire agents, squads, and orchestrators from declarative YAML at runtime &mdash; change orchestration without changing code.</div>
-      <div class="card-usage"><div class="usage-label">Used in</div><div class="usage-tags"><span class="usage-tag">SquadLoader</span><span class="usage-tag">AgentLoader</span><span class="usage-tag">_load_squad()</span><span class="usage-tag">k9_generator.sh</span></div></div>
-      <div class="card-footer"><a href="runtime-agent-loader-pattern.html" class="card-link" target="_blank" rel="noopener">View pattern &rarr;</a></div>
-    </div>
+      <div class="pattern-card" id="event-router-pattern" data-cat="routing">
+        <div class="card-top"><div class="card-icon">&#x21A3;</div><span class="card-category">Routing</span></div>
+        <div class="card-name">Event Router Pattern</div>
+        <div class="card-intent">Single entry point for all events &mdash; deterministic routing when intent is known, decoupled IntentOrchestrator when it is not, guaranteed response in all cases.</div>
+        <div class="card-usage"><div class="usage-label">Used in</div><div class="usage-tags"><span class="usage-tag">K9EventRouter</span><span class="usage-tag">IntentOrchestrator</span><span class="usage-tag">IntentSquad</span><span class="usage-tag">K9IntentAgent</span></div></div>
+        <div class="card-footer"><a href="event-router-pattern.html" class="card-link" target="_blank" rel="noopener">View pattern &rarr;</a></div>
+      </div>
 
-    <div class="pattern-card" data-cat="integration">
-      <div class="card-top"><div class="card-icon">&#x21CC;</div><span class="card-category">Integration</span></div>
-      <div class="card-name">External Connector Pattern</div>
-      <div class="card-intent">Access external systems through a standardised connector layer with governance enforced at the boundary &mdash; APIs, databases, MCP servers.</div>
-      <div class="card-usage"><div class="usage-label">Used in</div><div class="usage-tags"><span class="usage-tag">MCPHttpConnector</span><span class="usage-tag">MCPStdioConnector</span><span class="usage-tag">BaseMCPAgent</span><span class="usage-tag">Docling OCR</span></div></div>
-      <div class="card-footer"><a href="external-connector-pattern.html" class="card-link" target="_blank" rel="noopener">View pattern &rarr;</a></div>
-    </div>
+      <div class="pattern-card" id="model-router-pattern" data-cat="inference">
+        <div class="card-top"><div class="card-icon">&#x2B21;</div><span class="card-category">Inference</span></div>
+        <div class="card-name">Model Router Pattern</div>
+        <div class="card-intent">Dynamically select the most appropriate model based on task type, cost, latency, and policy &mdash; fully decoupled from agent code.</div>
+        <div class="card-usage"><div class="usage-label">Used in</div><div class="usage-tags"><span class="usage-tag">BaseModelRouter</span><span class="usage-tag">K9ModelRouter</span><span class="usage-tag">ModelRouterFactory</span><span class="usage-tag">llm_invoke()</span></div></div>
+        <div class="card-footer"><a href="model-router-pattern.html" class="card-link" target="_blank" rel="noopener">View pattern &rarr;</a></div>
+      </div>
 
-  </div>
-</div>
+      <div class="pattern-card" id="inference-pattern" data-cat="inference">
+        <div class="card-top"><div class="card-icon">&#x25CE;</div><span class="card-category">Inference</span></div>
+        <div class="card-name">Inference Layer Pattern</div>
+        <div class="card-intent">Provider-independent inference layer &mdash; ABB contracts separate from SBB implementations. Swap Ollama, Watsonx, or OpenAI via config.</div>
+        <div class="card-usage"><div class="usage-label">Used in</div><div class="usage-tags"><span class="usage-tag">LLMFactory</span><span class="usage-tag">OllamaLLM</span><span class="usage-tag">InferenceRequest</span><span class="usage-tag">ProviderAdapterRegistry</span></div></div>
+        <div class="card-footer"><a href="inference-pattern.html" class="card-link" target="_blank" rel="noopener">View pattern &rarr;</a></div>
+      </div>
+
+      <div class="pattern-card" id="provider-adapter-pattern" data-cat="inference">
+        <div class="card-top"><div class="card-icon">&#x25CF;</div><span class="card-category">Inference &middot; Integration</span></div>
+        <div class="card-name">Provider Adapter Pattern</div>
+        <div class="card-intent">Support multiple pluggable backends without coupling factories or agents to any vendor &mdash; LLMs, secret managers, caches.</div>
+        <div class="card-usage"><div class="usage-label">Used in</div><div class="usage-tags"><span class="usage-tag">SecretManagerFactory</span><span class="usage-tag">CacheFactory</span><span class="usage-tag">K9XLiteLLMBridgeAdapter</span><span class="usage-tag usage-tag--gold">EnvSecretAdapter</span></div></div>
+        <div class="card-footer"><a href="provider-adapter-pattern.html" class="card-link" target="_blank" rel="noopener">View pattern &rarr;</a></div>
+      </div>
+
+      <div class="pattern-card" id="llm-invoke-pattern" data-cat="inference">
+        <div class="card-top"><div class="card-icon">&#x2318;</div><span class="card-category">Inference</span></div>
+        <div class="card-name">LLM Invoke Pattern</div>
+        <div class="card-intent">Single utility function &mdash; llm_invoke() &mdash; encapsulates all inference calls with retry, governance, and audit in one place.</div>
+        <div class="card-usage"><div class="usage-label">Used in</div><div class="usage-tags"><span class="usage-tag">llm_invoke()</span><span class="usage-tag">K9ValidationLoopAgent</span><span class="usage-tag">K9CriticActorAgent</span><span class="usage-tag">K9IntentAgent</span></div></div>
+        <div class="card-footer"><a href="llm-invoke-pattern.html" class="card-link" target="_blank" rel="noopener">View pattern &rarr;</a></div>
+      </div>
+
+      <div class="pattern-card" id="factory-pattern" data-cat="governance">
+        <div class="card-top"><div class="card-icon">&#x25A0;</div><span class="card-category">Governance &middot; Execution</span></div>
+        <div class="card-name">Factory Pattern</div>
+        <div class="card-intent">Centralise component instantiation through static factories. Never instantiate agents, routers, or LLMs directly in application code.</div>
+        <div class="card-usage"><div class="usage-label">Used in</div><div class="usage-tags"><span class="usage-tag">AgentRegistry</span><span class="usage-tag">RouterFactory</span><span class="usage-tag">LLMFactory</span><span class="usage-tag">ModelRouterFactory</span></div></div>
+        <div class="card-footer"><a href="factory-pattern.html" class="card-link" target="_blank" rel="noopener">View pattern &rarr;</a></div>
+      </div>
+
+      <div class="pattern-card" id="runtime-agent-loader-pattern" data-cat="governance">
+        <div class="card-top"><div class="card-icon">&#x221E;</div><span class="card-category">Governance &middot; Execution</span></div>
+        <div class="card-name">Runtime Agent Loader Pattern</div>
+        <div class="card-intent">Load and wire agents, squads, and orchestrators from declarative YAML at runtime &mdash; change orchestration without changing code.</div>
+        <div class="card-usage"><div class="usage-label">Used in</div><div class="usage-tags"><span class="usage-tag">SquadLoader</span><span class="usage-tag">AgentLoader</span><span class="usage-tag">_load_squad()</span><span class="usage-tag">k9_generator.sh</span></div></div>
+        <div class="card-footer"><a href="runtime-agent-loader-pattern.html" class="card-link" target="_blank" rel="noopener">View pattern &rarr;</a></div>
+      </div>
+
+      <div class="pattern-card" id="external-connector-pattern" data-cat="integration">
+        <div class="card-top"><div class="card-icon">&#x21CC;</div><span class="card-category">Integration</span></div>
+        <div class="card-name">External Connector Pattern</div>
+        <div class="card-intent">Access external systems through a standardised connector layer with governance enforced at the boundary &mdash; APIs, databases, MCP servers.</div>
+        <div class="card-usage"><div class="usage-label">Used in</div><div class="usage-tags"><span class="usage-tag">MCPHttpConnector</span><span class="usage-tag">MCPStdioConnector</span><span class="usage-tag">BaseMCPAgent</span><span class="usage-tag">Docling OCR</span></div></div>
+        <div class="card-footer"><a href="external-connector-pattern.html" class="card-link" target="_blank" rel="noopener">View pattern &rarr;</a></div>
+      </div>
+
+    </div>
+  </div><!-- /main -->
+</div><!-- /layout -->
 
 <footer>
   <div class="footer-inner">
@@ -230,16 +280,46 @@
 </footer>
 
 <script>
-document.querySelectorAll('.filter-btn').forEach(function(btn){
-  btn.addEventListener('click',function(){
-    document.querySelectorAll('.filter-btn').forEach(function(b){b.classList.remove('active');});
-    this.classList.add('active');
-    var f=this.getAttribute('data-filter');
-    document.querySelectorAll('.pattern-card').forEach(function(c){
-      c.style.display=(f==='all'||c.getAttribute('data-cat').includes(f))?'':'none';
+  // Filter buttons
+  document.querySelectorAll('.filter-btn').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var f=this.dataset.filter;
+      document.querySelectorAll('.filter-btn').forEach(function(b){b.classList.remove('active');});
+      this.classList.add('active');
+      document.querySelectorAll('.pattern-card').forEach(function(c){
+        c.style.display=(f==='all'||c.dataset.cat===f||c.dataset.cat.includes(f))?'':'none';
+      });
     });
   });
-});
+
+  // Sidebar active link on scroll
+  var cards=document.querySelectorAll('.pattern-card[id]');
+  var links=document.querySelectorAll('.sidebar-link');
+  function setActive(){
+    var scrollY=window.scrollY+120;
+    var current='';
+    cards.forEach(function(card){
+      if(card.offsetTop<=scrollY)current=card.id;
+    });
+    links.forEach(function(link){
+      var href=link.getAttribute('href').replace('#','');
+      link.classList.toggle('active',href===current);
+    });
+  }
+  window.addEventListener('scroll',setActive,{passive:true});
+  setActive();
+
+  // Sidebar link click — brief highlight on target card
+  links.forEach(function(link){
+    link.addEventListener('click',function(){
+      var id=this.getAttribute('href').replace('#','');
+      var card=document.getElementById(id);
+      if(card){
+        card.classList.add('highlight');
+        setTimeout(function(){card.classList.remove('highlight');},1200);
+      }
+    });
+  });
 </script>
 </body>
 </html>
