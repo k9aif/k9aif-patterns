@@ -301,8 +301,16 @@ CSS = """
 
     /* Image */
     .pattern-image{margin:28px 0;border:1px solid var(--border);border-radius:10px;overflow:hidden;background:var(--bg-card);}
-    .pattern-image img{width:100%;display:block;}
+    .pattern-image img{width:100%;display:block;cursor:zoom-in;}
     .pattern-image figcaption{padding:8px 14px;font-size:12px;color:var(--muted);border-top:1px solid var(--border-l);font-style:italic;}
+
+    /* Lightbox */
+    .lb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:2000;align-items:center;justify-content:center;opacity:0;transition:opacity .22s ease;}
+    .lb-overlay.open{opacity:1;}
+    .lb-img{max-width:92vw;max-height:90vh;object-fit:contain;border-radius:8px;box-shadow:0 8px 60px rgba(0,0,0,0.6);}
+    .lb-close{position:absolute;top:18px;right:22px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);border-radius:50%;color:#fff;font-size:18px;cursor:pointer;width:36px;height:36px;display:flex;align-items:center;justify-content:center;transition:background .2s;}
+    .lb-close:hover{background:rgba(255,255,255,0.18);}
+    .lb-hint{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,0.38);font-size:12px;pointer-events:none;}
 
     /* Tags */
     .usage-tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px;}
@@ -340,8 +348,24 @@ JS = """
   if(hamburger)hamburger.addEventListener('click',open);
   if(sideClose)sideClose.addEventListener('click',close);
   if(overlay)overlay.addEventListener('click',close);
-  document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
   document.querySelectorAll('a[href^="#"]').forEach(function(a){a.addEventListener('click',function(e){var t=document.querySelector(this.getAttribute('href'));if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth'});close();}});});
+
+  // Lightbox
+  (function(){
+    var lb=document.getElementById('lb-overlay');
+    var lbImg=document.getElementById('lb-img');
+    var lbClose=document.getElementById('lb-close');
+    function openLb(src,alt){lbImg.src=src;lbImg.alt=alt||'';lb.style.display='flex';requestAnimationFrame(function(){lb.classList.add('open');});}
+    function closeLb(){lb.classList.remove('open');setTimeout(function(){lb.style.display='none';lbImg.src='';},230);}
+    document.querySelectorAll('.pattern-image img').forEach(function(img){
+      img.addEventListener('click',function(){openLb(this.src,this.alt);});
+    });
+    if(lbClose)lbClose.addEventListener('click',closeLb);
+    lb.addEventListener('click',function(e){if(e.target===lb)closeLb();});
+    document.addEventListener('keydown',function(e){
+      if(e.key==='Escape'){if(lb.classList.contains('open')){closeLb();}else{close();}}
+    });
+  })();
 """
 
 SIDE_PANEL_CATS = [
@@ -382,7 +406,7 @@ def make_page(pattern_id):
     if p["image"]:
         image_html = f'''<figure class="pattern-image">
       <img src="{p["image"]}" alt="{title} diagram" loading="lazy">
-      <figcaption>{title} — structural diagram</figcaption>
+      <figcaption>{title} — structural diagram &nbsp;·&nbsp; click to enlarge</figcaption>
     </figure>'''
 
     structure_items = "\n".join(f"<li>{s}</li>" for s in p["structure"])
@@ -481,6 +505,12 @@ def make_page(pattern_id):
     <span>Architecture patterns for governed agentic AI systems.</span>
   </div>
 </footer>
+
+<div class="lb-overlay" id="lb-overlay">
+  <button class="lb-close" id="lb-close">&#x2715;</button>
+  <img class="lb-img" id="lb-img" src="" alt=""/>
+  <span class="lb-hint">Click anywhere or press Esc to close</span>
+</div>
 
 <script>
 {JS}
