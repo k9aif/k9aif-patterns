@@ -151,6 +151,7 @@
 
     <div class="sidebar-cat">Integration</div>
     <a href="#external-connector-pattern" class="sidebar-link">External Connector</a>
+    <a href="#classified-orchestration-pattern" class="sidebar-link">Classified Orchestration</a>
   </aside>
 
   <!-- Main content -->
@@ -161,7 +162,7 @@
       <h1 class="article-title">K9-AIF Pattern Catalog</h1>
       <p class="article-desc">Reusable architectural patterns for building governed, enterprise-scale agentic AI systems. Framework-agnostic. Production-tested in K9-AIF.</p>
       <div class="article-meta">
-        <span class="meta-tag">11 Patterns</span>
+        <span class="meta-tag">12 Patterns</span>
         <span class="meta-tag">Apache 2.0</span>
         <span class="meta-tag">GoF &middot; POSA &middot; TOGAF lineage</span>
       </div>
@@ -272,6 +273,14 @@
         <div class="card-intent">Access external systems through a standardised connector layer with governance enforced at the boundary &mdash; APIs, databases, MCP servers.</div>
         <div class="card-usage"><div class="usage-label">Used in</div><div class="usage-tags"><span class="usage-tag">MCPHttpConnector</span><span class="usage-tag">MCPStdioConnector</span><span class="usage-tag">BaseMCPAgent</span><span class="usage-tag">Docling OCR</span></div></div>
         <div class="card-footer"><a href="external-connector-pattern.html" class="card-link" target="_blank" rel="noopener">View pattern &rarr;</a></div>
+      </div>
+
+      <div class="pattern-card" id="classified-orchestration-pattern" data-cat="integration">
+        <div class="card-top"><div class="card-icon">&#x2442;</div><span class="card-category">Integration &middot; Execution</span></div>
+        <div class="card-name">Classified Orchestration Pattern</div>
+        <div class="card-intent">A single Orchestrator coordinates both agentic (Squad&nbsp;+&nbsp;LLM) and deterministic (Integration Adapter) paths &mdash; the boundary drawn by the architect at design time, not resolved by the LLM at runtime.</div>
+        <div class="card-usage"><div class="usage-label">Used in</div><div class="usage-tags"><span class="usage-tag">BaseIntegrationAdapter</span><span class="usage-tag">IntegrationAdapterFactory</span><span class="usage-tag">BaseMessagingAdapter</span><span class="usage-tag usage-tag--gold">K9X Studio canvas</span></div></div>
+        <div class="card-footer"><a href="classified-orchestration-pattern.html" class="card-link" target="_blank" rel="noopener">View pattern &rarr;</a></div>
       </div>
 
     </div>

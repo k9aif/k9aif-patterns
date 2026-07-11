@@ -1,0 +1,152 @@
+@startuml classified-orchestration-class
+skinparam monochrome false
+skinparam classBackgroundColor #FAFAF8
+skinparam classBorderColor #BBBBAA
+skinparam classHeaderBackgroundColor #F0ECE4
+skinparam ArrowColor #555544
+skinparam FontName Inter
+skinparam FontSize 13
+skinparam Padding 6
+skinparam Shadowing false
+skinparam roundcorner 6
+skinparam linetype ortho
+
+title Classified Orchestration Pattern\n<size:11><color:#666055>Single Orchestrator coordinates both agentic (Squad) and deterministic (Adapter) paths</color></size>
+
+package "Orchestration Layer" <<Rectangle>> {
+
+  abstract class BaseOrchestrator {
+    +execute_flow(payload: dict): dict
+    +execute_squads(squads, payload): dict
+    #_load_squad(): BaseSquad
+    #classify(payload): PathDecision
+  }
+
+  class ClassifiedOrchestrator {
+    +execute_flow(payload: dict): dict
+    -_route_agentic(payload): dict
+    -_route_deterministic(payload): dict
+    -_route_event_chain(payload): dict
+  }
+
+  note right of ClassifiedOrchestrator
+    Classification is DESIGN-TIME:
+    the SA decides which paths exist.
+    Runtime: Orchestrator selects
+    path based on payload shape
+    or event_type.
+  end note
+
+}
+
+package "Agentic Path (LLM)" <<Rectangle>> {
+
+  abstract class BaseSquad {
+    +execute(payload: dict): dict
+    #flow: list[FlowStep]
+  }
+
+  abstract class BaseAgent {
+    +execute(payload: dict): dict
+    #config: dict
+  }
+
+  class DomainAgent1 {
+    +execute(payload: dict): dict
+  }
+
+  class DomainAgent2 {
+    +execute(payload: dict): dict
+  }
+
+}
+
+package "Deterministic Path (No LLM)" <<Rectangle>> {
+
+  abstract class BaseIntegrationAdapter {
+    +execute(payload: dict): dict
+    +validate_input(payload): void
+    +handle_error(exc, payload): dict
+    #{abstract} execute(payload): dict
+  }
+
+  abstract class BaseMessagingAdapter {
+    +execute(payload: dict): dict
+    #{abstract} publish(topic, message): dict
+    +consume(topic): dict
+  }
+
+  abstract class BaseWorkflowAdapter {
+    +execute(payload: dict): dict
+    #{abstract} trigger(workflow_id, params): dict
+    +get_status(run_id): dict
+  }
+
+  abstract class BaseProcessFlowAdapter {
+    +execute(payload: dict): dict
+    #{abstract} invoke(flow_id, payload): dict
+  }
+
+  abstract class BaseApiAdapter {
+    +execute(payload: dict): dict
+    #{abstract} call_endpoint(url, method, headers, body): dict
+  }
+
+  class IntegrationAdapterFactory {
+    {static} +register(name, cls): void
+    {static} +create(adapter_type, config): BaseIntegrationAdapter
+    {static} +registered(): list
+  }
+
+}
+
+package "Classification Gate" <<Rectangle>> {
+
+  class PathDecision {
+    +path: PathType
+    +target_id: str
+  }
+
+  enum PathType {
+    AGENTIC
+    ADAPTER_DIRECT
+    ADAPTER_CHAIN
+  }
+
+}
+
+' Inheritance
+BaseOrchestrator <|-- ClassifiedOrchestrator
+BaseSquad --> BaseAgent : "flow executes"
+BaseAgent <|-- DomainAgent1
+BaseAgent <|-- DomainAgent2
+BaseIntegrationAdapter <|-- BaseMessagingAdapter
+BaseIntegrationAdapter <|-- BaseWorkflowAdapter
+BaseIntegrationAdapter <|-- BaseProcessFlowAdapter
+BaseIntegrationAdapter <|-- BaseApiAdapter
+
+' Runtime relationships
+ClassifiedOrchestrator --> PathDecision : "evaluates"
+PathDecision --> PathType : "selects"
+ClassifiedOrchestrator --> BaseSquad : "AGENTIC path"
+ClassifiedOrchestrator --> IntegrationAdapterFactory : "ADAPTER paths"
+IntegrationAdapterFactory --> BaseIntegrationAdapter : "creates"
+
+' Event-driven chain (Messaging → Workflow/ProcessFlow)
+BaseMessagingAdapter ..> BaseWorkflowAdapter : "can trigger"
+BaseMessagingAdapter ..> BaseProcessFlowAdapter : "can trigger"
+
+note bottom of BaseIntegrationAdapter
+  No LLM. No inference cost.
+  Template Method pattern:
+  each subtype has one
+  domain-specific abstract method.
+end note
+
+note bottom of BaseSquad
+  Agents enrich shared context
+  progressively through the flow.
+  LLM invoked per agent.
+end note
+
+@enduml
