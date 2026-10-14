@@ -26,6 +26,25 @@ PATTERNS = [
     {"id": "sub-agent-pattern",              "cat": "Execution",              "cat_slug": "execution"},
 ]
 
+# Where each pattern is implemented in the framework (the page's "View implementation" link).
+# Kept here so regenerating the pages never reverts them.
+IMPLEMENTATION_LINKS = {
+    "agent-squad-pattern": "https://github.com/k9aif/k9-aif-framework/tree/main/k9_aif_abb/k9_squad",
+    "classified-orchestration-pattern": "https://github.com/k9aif/k9-aif-framework/tree/main/k9_aif_abb/k9_adapters/integration",
+    "critic-actor-pattern": "https://github.com/k9aif/k9-aif-framework/tree/main/k9_aif_abb/k9_agents/critic_actor",
+    "event-router-pattern": "https://github.com/k9aif/k9-aif-framework/tree/main/k9_aif_abb/k9_core/router",
+    "external-connector-pattern": "https://github.com/k9aif/k9-aif-framework/tree/main/k9_aif_abb/k9_mcp",
+    "factory-pattern": "https://github.com/k9aif/k9-aif-framework/tree/main/k9_aif_abb/k9_factories",
+    "inference-pattern": "https://github.com/k9aif/k9-aif-framework/tree/main/k9_aif_abb/k9_inference",
+    "llm-invoke-pattern": "https://github.com/k9aif/k9-aif-framework/tree/main/k9_aif_abb/k9_utils",
+    "model-router-pattern": "https://github.com/k9aif/k9-aif-framework/tree/main/k9_aif_abb/k9_inference/routers",
+    "provider-adapter-pattern": "https://github.com/k9aif/k9-aif-framework/tree/main/k9_aif_abb/k9_factories",
+    "runtime-agent-loader-pattern": "https://github.com/k9aif/k9-aif-framework/tree/main/k9_aif_abb/k9_squad",
+    "sub-agent-pattern": "https://github.com/k9aif/k9-aif-framework/tree/main/k9_aif_abb/k9_agents",
+    "validation-loop-pattern": "https://github.com/k9aif/k9-aif-framework/tree/main/k9_aif_abb/k9_agents/validation",
+    "squad-layer-pattern": "https://github.com/k9aif/k9-aif-framework/blob/main/k9_aif_abb/k9_squad/squad_loader.py"
+}
+
 PATTERN_DATA = {
     "agent-squad-pattern": {
         "title": "Agent Squad Pattern",
@@ -432,7 +451,8 @@ def make_page(pattern_id):
     concept_tags = "\n".join(f'<span class="usage-tag">{c}</span>' for c in p["key_concepts"])
     used_tags = "\n".join(f'<span class="usage-tag">{u}</span>' for u in p["used_in"])
     side_panel = make_side_panel(pattern_id)
-    github_url = f"https://github.com/k9aif/k9aif-patterns/tree/main/k9aif-patterns/{p['github']}"
+    github_url = IMPLEMENTATION_LINKS.get(pattern_id,
+                                          f"https://github.com/k9aif/k9aif-patterns/tree/main/{p['github']}")
 
     return f"""<!DOCTYPE html>
 <html lang="en">
