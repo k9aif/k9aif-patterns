@@ -1,0 +1,62 @@
+@startuml squad_layer
+title Squad Layer: an orchestrator knows only squads
+
+package "Entry point (wires once)" {
+  class "main / process" as Entry
+}
+
+package "Orchestrator layer" {
+  class "MyOrchestrator" as Orch {
+    +squads : SquadLoader
+    +execute_flow(payload)
+  }
+}
+
+package "Squad layer" {
+  class SquadLoader {
+    +from_agents(agents_dir, config, squad_cls)
+    +load_one(squad_yaml, squad_id, config)
+  }
+  class BaseSquad {
+    +flow
+    +before_step(agent_name, context)
+    +execute(payload)
+  }
+  class "<App>Squad" as AppSquad
+  class "squad YAML" as SquadYaml <<config>> {
+    agents: [...]
+    flow: [...]
+  }
+}
+
+package "Agent layer" {
+  class AgentLoader {
+    +resolve_class(name)
+    +merge_with_global(name, config)
+  }
+  class "agent YAML" as AgentYaml <<config>> {
+    class:
+    module:
+  }
+  abstract class BaseAgent {
+    +execute(payload)
+  }
+}
+
+Entry --> SquadLoader : builds once
+Entry --> Orch : squads=
+Orch --> SquadLoader : load_one(squad_yaml, squad_id)
+SquadLoader ..> SquadYaml : reads
+SquadLoader --> AgentLoader : builds the agents\nthe squad YAML names
+AgentLoader ..> AgentYaml : reads
+SquadLoader ..> AppSquad : builds one per squad
+BaseSquad <|-- AppSquad
+BaseSquad o-- BaseAgent : agents
+
+note right of Orch
+  No agent names, no AgentRegistry,
+  no AgentLoader here (K9-DEC-002).
+  If a squad's agents change,
+  the orchestrator is unaffected.
+end note
+@enduml

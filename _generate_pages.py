@@ -13,6 +13,7 @@ NAV_LINKS = """
 
 PATTERNS = [
     {"id": "agent-squad-pattern",           "cat": "Execution",              "cat_slug": "execution"},
+    {"id": "squad-layer-pattern",           "cat": "Execution",              "cat_slug": "execution"},
     {"id": "validation-loop-pattern",        "cat": "Execution",              "cat_slug": "execution"},
     {"id": "critic-actor-pattern",           "cat": "Execution",              "cat_slug": "execution"},
     {"id": "model-router-pattern",           "cat": "Inference",              "cat_slug": "inference"},
@@ -40,9 +41,27 @@ The Squad pattern introduces a formal coordination layer between orchestrators a
             "The next agent receives the enriched context as input",
             "Governance is enforced before and after each step",
         ],
-        "key_concepts": ["BaseSquad", "SquadLoader", "flow steps", "result_key", "context enrichment", "AgentRegistry"],
-        "used_in": ["BaseSquad", "SquadLoader", "EOC — ClaimsProcessingSquad", "EOC — FraudDetectionSquad", "EOC — ComplianceSquad", "DoW — 6 DoDAF stage squads"],
+        "key_concepts": ["BaseSquad", "SquadLoader", "flow steps", "result_key", "context enrichment", "Squad Layer (orchestrator knows only squads)"],
+        "used_in": ["BaseSquad", "SquadLoader", "DAS — acquisition stage squads", "EOC — domain squads"],
         "github": "agent-squad-pattern",
+    },
+    "squad-layer-pattern": {
+        "title": "Squad Layer Pattern",
+        "intent": "Keep an orchestrator's knowledge to squads only: the agents a squad needs are named in its own YAML and built by the squad layer, so if a squad's agents change, no orchestrator changes.",
+        "image": "squad-layer-pattern/squad_layer.png",
+        "motivation": """Three-layer decoupling says each layer knows only the layer below it. The common way to break it is quiet: the orchestrator builds its squads' agents. It imports none of them; it lists their names, fills an agent registry and hands that to a squad loader. Import checks pass, yet every change to a squad's team means editing the orchestrator.
+
+The Squad Layer pattern gives agent construction to the layer that owns the team. The entry point builds the squad loader once; orchestrators load squads by YAML file and id; the loader builds the agents each squad's YAML names. Squad-level behaviour lives in one application class, instantiated per squad.""",
+        "structure": [
+            "Squad YAML names the squad's agents and flow",
+            "The entry point builds the squad loader (SquadLoader.from_agents) once and passes it to every orchestrator",
+            "The orchestrator calls self.squads.load_one(squad_yaml, squad_id) — squads only",
+            "The squad loader resolves each named agent from its own YAML (class + module) and builds it",
+            "One &lt;App&gt;Squad(BaseSquad) per application carries squad-level behaviour (before_step)",
+        ],
+        "key_concepts": ["SquadLoader.from_agents", "load_one(config=)", "BaseSquad.before_step", "&lt;App&gt;Squad", "K9-DEC-002"],
+        "used_in": ["K9-AIF 1.18.1", "DAS — DasSquad (nine squads)", "k9aif new scaffold"],
+        "github": "squad-layer-pattern",
     },
     "validation-loop-pattern": {
         "title": "Validation Loop Pattern",

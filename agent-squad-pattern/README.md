@@ -109,7 +109,7 @@ Squads provide a natural boundary for:
 
 ### Scalability
 
-New agents can be added to a squad without modifying orchestrator logic.
+New agents can be added to a squad without modifying orchestrator logic. The [Squad Layer Pattern](../squad-layer-pattern/README.md) is how that holds: the squad layer builds the agents a squad's YAML names, and the orchestrator knows only squads.
 
 ---
 
