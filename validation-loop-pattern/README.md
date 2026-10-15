@@ -96,7 +96,7 @@ From the Squad or Orchestrator perspective, a `ValidationLoopAgent` is indisting
 max_iterations:             5       # hard cap — loop never runs forever
 confidence_threshold:       0.8     # available to should_continue()
 finalize_on_max_iterations: true    # true → finalize with best effort; false → escalate
-escalate_on_tool_error:     false   # false → FAIL on tool exception; true → ESCALATE
+on_tool_error:              raise   # raise (default, 1.18.2) | escalate | fail on a tool exception
 ```
 
 All keys are optional. Defaults are reasonable for most domains.
